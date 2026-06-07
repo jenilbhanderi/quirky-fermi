@@ -1,0 +1,23 @@
+services:
+  - type: web
+    runtime: node
+    name: hylunian-backend
+    plan: free
+    buildCommand: npm install
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: DB_PATH
+        value: /tmp/hylunian.db
+      - key: CORS_ORIGIN
+        value: https://hylunian.com,https://www.hylunian.com
+      - key: APP_NAME
+        value: Hylunian
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_INVITE_CODE
+        value: hylunian-alpha-2026

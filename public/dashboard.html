@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hylunian — Full CMS Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050505;
+      --card: #0a0a0a;
+      --border: rgba(255,255,255,0.08);
+      --text: #fafafa;
+      --text-muted: #a1a1aa;
+      --text-dim: #52525b;
+      --red: #FF003C;
+      --green: #00FF66;
+      --blue: #0033FF;
+      --accent-glow: rgba(0, 255, 102, 0.15);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Ambient Background ── */
+    .ambient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      overflow: hidden; mix-blend-mode: screen;
+    }
+    .ambient .orb {
+      position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15;
+    }
+    .ambient .orb-red { width: 50vw; height: 50vw; top: -20%; left: -10%; background: var(--red); }
+    .ambient .orb-green { width: 40vw; height: 40vw; bottom: -10%; right: -5%; background: var(--green); }
+    .ambient .orb-blue { width: 45vw; height: 45vw; top: 40%; left: 50%; background: var(--blue); }
+
+    .container {
+      position: relative; z-index: 1;
+      max-width: 960px; margin: 0 auto; padding: 40px 24px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; padding-bottom: 32px; border-bottom: 1px solid var(--border);
+    }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; background: #141414;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+      gap: 3px;
+    }
+    .logo .bar { width: 3px; height: 14px; border-radius: 2px; }
+    .logo .bar-r { background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .logo .bar-g { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .logo .bar-b { background: var(--blue); box-shadow: 0 0 6px var(--blue); }
+    .brand { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
+    .subtitle { font-size: 13px; color: var(--text-dim); font-weight: 400; }
+
+    .status-badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 100px;
+      background: rgba(0,255,102,0.06); border: 1px solid rgba(0,255,102,0.15);
+      font-size: 12px; font-weight: 500; color: var(--green);
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex; gap: 12px; margin-bottom: 32px;
+      border-bottom: 1px solid var(--border); padding-bottom: 16px;
+    }
+    .tab-btn {
+      background: transparent; border: none; color: var(--text-muted);
+      font-size: 14px; font-weight: 500; cursor: pointer; padding: 8px 16px;
+      border-radius: 8px; transition: all 0.2s;
+    }
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .tab-btn.active { color: #fff; background: rgba(255,255,255,0.1); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 40px; }
+    .section-title {
+      font-size: 13px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--text-dim); margin-bottom: 16px;
+    }
+
+    /* ── Forms & Inputs ── */
+    .form-group { margin-bottom: 24px; }
+    .form-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+    .form-input, .form-textarea {
+      width: 100%; padding: 14px 20px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 14px; color: var(--text); font-size: 14px;
+      font-family: inherit; outline: none; transition: all 0.3s ease;
+    }
+    .form-textarea { resize: vertical; min-height: 100px; font-family: 'SF Mono', 'Fira Code', monospace; }
+    .form-markdown { min-height: 300px; }
+    .form-input:focus, .form-textarea:focus { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.07); }
+
+    .btn {
+      padding: 14px 28px; border: none; border-radius: 14px;
+      font-size: 14px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all 0.3s ease;
+      display: inline-flex; align-items: center; gap: 8px; justify-content: center;
+    }
+    .btn-primary { background: white; color: black; box-shadow: 0 0 20px rgba(255,255,255,0.15); }
+    .btn-primary:hover { background: #e4e4e7; transform: translateY(-1px); }
+    .btn-danger { background: rgba(255,0,60,0.1); color: var(--red); border: 1px solid rgba(255,0,60,0.2); }
+    .btn-danger:hover { background: rgba(255,0,60,0.2); }
+    .btn-export { background: rgba(0,255,102,0.08); color: var(--green); border: 1px solid rgba(0,255,102,0.15); }
+    .btn-sm { padding: 8px 16px; font-size: 12px; border-radius: 10px; }
+
+    /* ── Stats Grid ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 28px 24px; transition: all 0.3s ease;
+    }
+    .stat-card:hover { border-color: rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.3); transform: translateY(-2px); }
+    .stat-label { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .stat-value { font-size: 36px; font-weight: 700; letter-spacing: -1px; }
+    .stat-value.green { color: var(--green); text-shadow: 0 0 20px rgba(0,255,102,0.3); }
+
+    /* ── Table ── */
+    .table-wrapper { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { padding: 14px 24px; text-align: left; font-size: 11px; font-weight: 500; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); }
+    tbody td { padding: 16px 24px; font-size: 14px; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .empty-state { padding: 60px 24px; text-align: center; color: var(--text-dim); font-size: 14px; }
+
+    /* ── Toast ── */
+    .toast { position: fixed; bottom: 32px; right: 32px; z-index: 1000; padding: 16px 24px; border-radius: 16px; font-size: 14px; font-weight: 500; backdrop-filter: blur(20px); animation: slideUp 0.3s ease-out; }
+    .toast-success { background: rgba(0,255,102,0.1); border: 1px solid rgba(0,255,102,0.2); color: var(--green); }
+    .toast-error { background: rgba(255,0,60,0.1); border: 1px solid rgba(255,0,60,0.2); color: var(--red); }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  </style>
+</head>
+<body>
+
+  <div class="ambient">
+    <div class="orb orb-red"></div>
+    <div class="orb orb-green"></div>
+    <div class="orb orb-blue"></div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo-area">
+        <div class="logo">
+          <div class="bar bar-r"></div>
+          <div class="bar bar-g"></div>
+          <div class="bar bar-b"></div>
+        </div>
+        <div>
+          <div class="brand">Hylunian CMS</div>
+          <div class="subtitle">Admin Dashboard</div>
+        </div>
+      </div>
+      <div class="status-badge" id="serverStatus">
+        <div class="status-dot"></div><span>Checking...</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('waitlist')">Waitlist</button>
+      <button class="tab-btn" onclick="switchTab('content')">Site Settings</button>
+      <button class="tab-btn" onclick="switchTab('research')">Research Papers</button>
+    </div>
+
+    <!-- ── TAB: WAITLIST ── -->
+    <div id="tab-waitlist" class="tab-content active">
+      <div class="section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Signups</div>
+            <div class="stat-value green" id="statTotal">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="table-wrapper">
+          <div class="table-header">
+            <h3 style="font-size: 15px; font-weight: 600;">Waitlist Entries</h3>
+            <div>
+              <button class="btn btn-export btn-sm" onclick="exportCSV()">Export CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="loadWaitlist()">Refresh</button>
+            </div>
+          </div>
+          <div id="tableBody">
+            <div class="empty-state">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: SITE CONTENT ── -->
+    <div id="tab-content" class="tab-content">
+      <div class="section">
+        <div class="section-title">Edit Website Content</div>
+        <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 24px;">
+          Changes saved here will instantly update on your live website.
+        </p>
+        <form id="settingsForm">
+          <div class="form-group">
+            <label class="form-label">Hero Title (Main large text)</label>
+            <input type="text" id="set-hero_title" class="form-input" placeholder="e.g. Next-Generation Optical Architecture">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hero Subtitle</label>
+            <input type="text" id="set-hero_subtitle" class="form-input" placeholder="e.g. Pioneering transparent augmented reality...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Waitlist Call-to-Action Text</label>
+            <input type="text" id="set-cta_text" class="form-input" placeholder="e.g. Join the Alpha Waitlist">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── TAB: RESEARCH PAPERS ── -->
+    <div id="tab-research" class="tab-content">
+      <div id="paperListView">
+        <div class="section" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div class="section-title" style="margin:0;">Publications</div>
+            <div style="font-size: 13px; color: var(--text-dim); margin-top: 4px;">If no papers are published, the section hides automatically on the live site.</div>
+          </div>
+          <button class="btn btn-primary" onclick="showPaperEditor()">Write New Paper</button>
+        </div>
+        <div class="table-wrapper">
+          <div id="papersTableBody">
+            <div class="empty-state">No research papers published yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="paperEditorView" style="display:none;">
+        <div class="section">
+          <button class="btn btn-sm" style="background:transparent; border:1px solid var(--border); color:white; margin-bottom:24px;" onclick="hidePaperEditor()">← Back to List</button>
+          <div class="section-title">Compose Research Paper</div>
+          <form id="paperForm">
+            <div class="form-group">
+              <label class="form-label">Title</label>
+              <input type="text" id="paper-title" class="form-input" required>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div class="form-group">
+                <label class="form-label">Category (e.g. Optics, AI, Hardware)</label>
+                <input type="text" id="paper-category" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Authors</label>
+                <input type="text" id="paper-authors" class="form-input" placeholder="Optional">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Gradient Color (Tailwind classes)</label>
+              <input type="text" id="paper-color" class="form-input" value="from-blue-500 to-purple-500" placeholder="e.g. from-green-400 to-emerald-600">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Abstract / Short Summary (Shows on Landing Page)</label>
+              <textarea id="paper-abstract" class="form-textarea" required></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Full Article Content (Markdown format)</label>
+              <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;">Use **bold**, # Headings, and bullet points.</div>
+              <textarea id="paper-content" class="form-textarea form-markdown" placeholder="Write your full research paper here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publish Paper</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = '/api';
+
+    // ── UI Logic ──
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      
+      if (tabId === 'content') loadSettings();
+      if (tabId === 'research') loadPapers();
+    }
+
+    function showToast(msg, type='success') {
+      const existing = document.querySelector('.toast');
+      if(existing) existing.remove();
+      const t = document.createElement('div');
+      t.className = `toast toast-${type}`;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    function checkAuth() {
+      const token = localStorage.getItem('hy_token');
+      if (!token) return autoLogin();
+      return token;
+    }
+
+    async function autoLogin() {
+      try {
+        let res = await fetch(`${API}/auth/login`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: 'dashboard', password: 'dashboard-viewer-2026' })
+        });
+        if (!res.ok) {
+          res = await fetch(`${API}/auth/register`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: 'dashboard', password: 'dashboard-viewer-2026', inviteCode: 'hylunian-alpha-2026' })
+          });
+        }
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem('hy_token', data.token);
+          return data.token;
+        }
+      } catch(e) { console.error(e); }
+      return null;
+    }
+
+    // ── Waitlist Logic ──
+    async function checkHealth() {
+      try {
+        const res = await fetch(`${API}/health`);
+        const data = await res.json();
+        const b = document.getElementById('serverStatus');
+        b.innerHTML = `<div class="status-dot"></div><span>Online · ${data.uptime}s</span>`;
+      } catch (err) {
+        document.getElementById('serverStatus').innerHTML = `<span style="color:var(--red);">⚠ Offline</span>`;
+      }
+    }
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API}/admin/waitlist/stats`);
+        if(res.ok) {
+          const d = await res.json();
+          document.getElementById('statTotal').textContent = d.total;
+        }
+      } catch(e){}
+    }
+    async function loadWaitlist() {
+      const token = await checkAuth();
+      try {
+        const res = await fetch(`${API}/admin/waitlist?limit=50`, { headers: { 'Authorization': `Bearer ${token}` }});
+        const data = await res.json();
+        if(!data.entries || data.entries.length === 0) {
+          document.getElementById('tableBody').innerHTML = `<div class="empty-state">No entries yet.</div>`;
+          return;
+        }
+        let html = `<table><thead><tr><th>ID</th><th>Email</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody>`;
+        data.entries.forEach(e => {
+          html += `<tr><td>#${e.id}</td><td style="color:white;">${e.email}</td><td>${e.status}</td><td>${new Date(e.created_at+'Z').toLocaleDateString()}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteWaitlist(${e.id})">Del</button></td></tr>`;
+        });
+        document.getElementById('tableBody').innerHTML = html + '</tbody></table>';
+      } catch(e){}
+    }
+    async function deleteWaitlist(id) {
+      if(!confirm('Delete entry?')) return;
+      const res = await fetch(`${API}/admin/waitlist/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('hy_token')}` }});
+      if(res.ok) { showToast('Deleted'); loadWaitlist(); loadStats(); }
+    }
+    async function exportCSV() {
+      const res = await fetch(`${API}/admin/waitlist/export`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('hy_token')}` }});
+      const blob = await res.blob();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'waitlist.csv'; a.click();
+    }
+
+    // ── Settings Logic ──
+    async function loadSettings() {
+      const res = await fetch(`${API}/settings`);
+      if(res.ok) {
+        const d = await res.json();
+        document.getElementById('set-hero_title').value = d.hero_title || '';
+        document.getElementById('set-hero_subtitle').value = d.hero_subtitle || '';
+        document.getElementById('set-cta_text').value = d.cta_text || '';
+      }
+    }
+    document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        hero_title: document.getElementById('set-hero_title').value,
+        hero_subtitle: document.getElementById('set-hero_subtitle').value,
+        cta_text: document.getElementById('set-cta_text').value,
+      };
+      const token = await checkAuth();
+      const res = await fetch(`${API}/settings`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(payload)
+      });
+      if(res.ok) showToast('Website content updated live!');
+      else showToast('Failed to save settings', 'error');
+    });
+
+    // ── Papers Logic ──
+    function showPaperEditor() {
+      document.getElementById('paperListView').style.display = 'none';
+      document.getElementById('paperEditorView').style.display = 'block';
+      document.getElementById('paperForm').reset();
+    }
+    function hidePaperEditor() {
+      document.getElementById('paperListView').style.display = 'block';
+      document.getElementById('paperEditorView').style.display = 'none';
+    }
+    async function loadPapers() {
+      const res = await fetch(`${API}/papers`);
+      if(res.ok) {
+        const papers = await res.json();
+        if(papers.length === 0) {
+          document.getElementById('papersTableBody').innerHTML = `<div class="empty-state">No research papers published yet.</div>`;
+          return;
+        }
+        let html = `<table><thead><tr><th>Title</th><th>Category</th><th>Date</th><th></th></tr></thead><tbody>`;
+        papers.forEach(p => {
+          html += `<tr><td style="color:white; font-weight:500;">${p.title}</td><td>${p.category}</td><td>${new Date(p.created_at+'Z').toLocaleDateString()}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="deletePaper(${p.id})">Del</button></td></tr>`;
+        });
+        document.getElementById('papersTableBody').innerHTML = html + '</tbody></table>';
+      }
+    }
+    document.getElementById('paperForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('paper-title').value,
+        category: document.getElementById('paper-category').value,
+        authors: document.getElementById('paper-authors').value,
+        color: document.getElementById('paper-color').value,
+        abstract: document.getElementById('paper-abstract').value,
+        content: document.getElementById('paper-content').value,
+      };
+      const token = await checkAuth();
+      const res = await fetch(`${API}/papers`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(payload)
+      });
+      if(res.ok) {
+        showToast('Paper published!');
+        hidePaperEditor();
+        loadPapers();
+      } else {
+        const d = await res.json();
+        showToast(d.error || 'Failed to publish', 'error');
+      }
+    });
+    async function deletePaper(id) {
+      if(!confirm('Permanently delete this paper?')) return;
+      const res = await fetch(`${API}/papers/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('hy_token')}` }});
+      if(res.ok) { showToast('Paper deleted'); loadPapers(); }
+    }
+
+    // Init
+    checkHealth(); loadStats(); loadWaitlist();
+  </script>
+</body>
+</html>
