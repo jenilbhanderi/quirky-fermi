@@ -401,13 +401,7 @@ function Footer({ isDark }) {
         <div className="flex items-center gap-2">
           
           {/* Full-Sized Custom Logo for Footer (Matches Navbar perfectly) */}
-          <div className="relative flex items-center justify-center w-8 h-8 bg-[#141414] rounded-lg border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-            <div className="flex gap-[3px]">
-              <div className="w-[3px] h-[14px] rounded-sm bg-[#FF003C] shadow-[0_0_6px_#FF003C]"></div>
-              <div className="w-[3px] h-[14px] rounded-sm bg-[#00FF66] shadow-[0_0_6px_#00FF66]"></div>
-              <div className="w-[3px] h-[14px] rounded-sm bg-[#0033FF] shadow-[0_0_6px_#0033FF]"></div>
-            </div>
-          </div>
+          <img src="/favicon.svg" alt="Hylunian Logo" className="w-8 h-8" />
           
           <span className={`font-semibold tracking-tight text-lg transition-colors ${isDark ? 'text-white' : 'text-black'}`}>Hylunian</span>
         </div>
