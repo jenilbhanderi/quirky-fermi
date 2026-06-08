@@ -5,7 +5,11 @@ import { ArrowRight, Layers, ChevronRight, Sun, Moon, ArrowLeft } from 'lucide-r
 import ReactMarkdown from 'react-markdown';
 
 // ─── API Configuration ──────────────────────────────────────
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+// In production, frontend and backend share the same origin, so use relative /api.
+// In dev, Vite runs on :5173 and backend on :3001, so we need the full URL.
+const API_BASE = import.meta.env.VITE_API_URL || (
+  window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api'
+);
 
 async function joinWaitlist(email) {
   const res = await fetch(`${API_BASE}/waitlist`, {

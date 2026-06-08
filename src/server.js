@@ -66,9 +66,18 @@ app.use('/api/admin', require('./routes/admin'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/papers', require('./routes/papers'));
 
-// ─── 404 Handler ────────────────────────────────────────────
-app.use((req, res) => {
-  res.status(404).json({ error: 'Endpoint not found.' });
+// ─── Serve React Frontend (built files) ────────────────────
+const frontendDist = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendDist));
+
+// ─── SPA Catch-All (React Router) ──────────────────────────
+// Any non-API, non-dashboard route falls through to React's index.html
+app.get('*', (req, res) => {
+  // Don't catch /dashboard.html — it's already served from public/
+  if (req.path === '/dashboard.html') {
+    return res.status(404).json({ error: 'Endpoint not found.' });
+  }
+  res.sendFile(path.join(frontendDist, 'index.html'));
 });
 
 // ─── Centralized Error Handler ──────────────────────────────
