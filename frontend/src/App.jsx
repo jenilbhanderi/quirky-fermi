@@ -105,14 +105,7 @@ function Navbar({ theme, setTheme, isDark }) {
       <div className={`flex items-center justify-between w-full max-w-5xl px-6 py-4 rounded-full backdrop-blur-xl transition-all duration-500 shadow-xl ${isDark ? 'bg-black/40 border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]' : 'bg-white/60 border border-black/5 shadow-[0_10px_40px_rgba(0,0,0,0.05)]'}`}>
         
         <Link to="/" className="flex items-center gap-2">
-          {/* Custom Logo: Vertical RGB Subpixel Array */}
-          <div className="relative flex items-center justify-center w-8 h-8 bg-[#141414] rounded-lg border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-            <div className="flex gap-[3px]">
-              <div className="w-[3px] h-[14px] rounded-sm bg-[#FF003C] shadow-[0_0_6px_#FF003C]"></div>
-              <div className="w-[3px] h-[14px] rounded-sm bg-[#00FF66] shadow-[0_0_6px_#00FF66]"></div>
-              <div className="w-[3px] h-[14px] rounded-sm bg-[#0033FF] shadow-[0_0_6px_#0033FF]"></div>
-            </div>
-          </div>
+          <img src="/favicon.svg" alt="Hylunian Logo" className="w-8 h-8" />
           <span className={`font-semibold tracking-tight text-lg ${isDark ? 'text-white' : 'text-black'}`}>Hylunian</span>
         </Link>
         
