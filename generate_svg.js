@@ -9,7 +9,7 @@ for (let y=0; y<8; y++) {
     }
     // slightly overlap them (width 20.5) to avoid subpixel rendering gaps, except we want individual pixels visible?
     // the image shows them as perfectly merging. Using width 20 height 20 rx 2 gives a nice subtle grid effect!
-    rects += `      <rect x="${x*20}" y="${y*20}" width="20" height="20" rx="2" />\n`;
+    rects += `      <rect x="${x*20}" y="${y*20}" width="20" height="20" />\n`;
   }
 }
 const svg = `<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
