@@ -19,30 +19,19 @@ app.use(helmet({
 }));
 app.disable('x-powered-by');
 
-// CORS — allow the React frontend + built-in dashboard
-const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
-  .split(',')
-  .map((o) => o.trim());
-// Always allow the dashboard served from this same server
-allowedOrigins.push(`http://localhost:${PORT}`);
-
+// CORS — allow all origins (API is public, dashboard + frontend are same-origin)
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (e.g., curl, Postman, server-to-server)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      callback(new Error('Not allowed by CORS'));
-    },
-    methods: ['GET', 'POST', 'DELETE'],
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
 );
 
-// Body parsing with size limits
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: false, limit: '10kb' }));
+// Body parsing — increased limit for markdown research papers
+app.use(express.json({ limit: '500kb' }));
+app.use(express.urlencoded({ extended: false, limit: '500kb' }));
 
 // Serve static dashboard UI
 app.use(express.static(path.join(__dirname, '../public')));
