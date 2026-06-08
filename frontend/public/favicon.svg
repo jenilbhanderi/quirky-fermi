@@ -1,11 +1,14 @@
 <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#B07BFF" />
-      <stop offset="50%" stop-color="#7C5CFF" />
-      <stop offset="100%" stop-color="#3D7CFF" />
-    </linearGradient>
+    <!-- userSpaceOnUse ensures ONE single giant gradient across the entire canvas -->
+    <!-- cx="160" cy="160" locks the center of the light source perfectly to the bottom-right corner -->
+<radialGradient id="grad" cx="160" cy="160" r="227" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#3D7CFF"/>
+    <stop offset="45%" stop-color="#6E63FF"/>
+    <stop offset="100%" stop-color="#C9B5FF"/>
+</radialGradient>
   </defs>
+  
   <g id="pixels" fill="url(#grad)">
       <rect x="0" y="0" width="20" height="20" />
       <rect x="20" y="0" width="20" height="20" />
