@@ -27,7 +27,7 @@ async function joinWaitlist(email) {
 }
 
 export default function App() {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
   const [settings, setSettings] = useState({});
   const [papers, setPapers] = useState([]);
   const [loading, setLoading] = useState(true);
