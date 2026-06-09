@@ -9,13 +9,13 @@ function errorHandler(err, req, res, _next) {
     console.error(err.stack);
   }
 
-  // SQLite unique constraint violation
-  if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+  // Unique constraint violation (SQLite or PostgreSQL)
+  if (err.code === 'SQLITE_CONSTRAINT_UNIQUE' || err.code === '23505') {
     return res.status(409).json({ error: 'This resource already exists.' });
   }
 
-  // SQLite constraint violation (generic)
-  if (err.code && err.code.startsWith('SQLITE_CONSTRAINT')) {
+  // Generic constraint violation
+  if ((err.code && err.code.startsWith('SQLITE_CONSTRAINT')) || (err.code && err.code.startsWith('23'))) {
     return res.status(400).json({ error: 'Database constraint violation.' });
   }
 

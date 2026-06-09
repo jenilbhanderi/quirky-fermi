@@ -1,8 +1,12 @@
 const { Pool } = require('pg');
 
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/hylunian';
+const isProduction = process.env.NODE_ENV === 'production';
+const isInternal = connectionString.includes('.internal');
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/hylunian',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  connectionString,
+  ssl: isProduction && !isInternal ? { rejectUnauthorized: false } : false
 });
 
 // ─── Table Creation ─────────────────────────────────────────
