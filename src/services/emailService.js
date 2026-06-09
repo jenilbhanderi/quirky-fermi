@@ -295,12 +295,12 @@ async function broadcastDailyPaper(paperData, waitlistEmails) {
 
   const promises = waitlistEmails.map(email => {
     return transporter.sendMail({
-      from: \`"\${appName} Research" <\${process.env.SMTP_FROM || process.env.SMTP_USER}>\`,
+      from: `"${appName} Research" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: email,
-      subject: \`New Display Tech Research: \${paperData.title}\`,
+      subject: `New Display Tech Research: ${paperData.title}`,
       html,
       text,
-    }).catch(err => console.error(\`⚠️ Failed to broadcast to \${email}\`, err.message));
+    }).catch(err => console.error(`⚠️ Failed to broadcast to ${email}`, err.message));
   });
 
   await Promise.all(promises);
