@@ -33,9 +33,9 @@ export default function HardwareSpecs({ isDark }) {
             Our proprietary subpixel structure abandons the traditional RGB pentile matrix. Instead, we utilize an interleaved quantum-dot grid that reduces chromatic aberration by 40% and achieves perfect subpixel rendering at the hardware level.
           </p>
           <ul className="list-disc list-inside space-y-2 font-mono text-sm opacity-80">
-            <li>Density: 850 PPI (Pixels Per Inch)</li>
-            <li>Subpixel Geometry: Hexagonal interleaved</li>
-            <li>Peak Brightness: 4,000 Nits (HDR burst)</li>
+            <li>Targeting ultra-high pixel density</li>
+            <li>Hexagonal interleaved geometry</li>
+            <li>Optimized for maximum HDR brightness</li>
           </ul>
         </div>
 
@@ -43,12 +43,12 @@ export default function HardwareSpecs({ isDark }) {
         <div className={`p-8 rounded-3xl border ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/10'}`}>
           <h2 className={`text-2xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-black'}`}>Optical Clarity & HMI Integration</h2>
           <p className="mb-4 font-light leading-relaxed">
-            By fusing the touch interface layer directly into the photon-emission substrate, we eliminate the air gap entirely. This results in zero parallax error, providing a true 1:1 human-machine interaction surface.
+            By fusing the touch interface layer directly into the photon-emission substrate, our goal is to eliminate the air gap entirely. This approach is designed to achieve zero parallax error, providing a true 1:1 human-machine interaction surface.
           </p>
           <ul className="list-disc list-inside space-y-2 font-mono text-sm opacity-80">
-            <li>Reflectivity: &lt;0.5% (Anti-Reflective Coating)</li>
-            <li>Touch Polling Rate: 1000Hz</li>
-            <li>Glass Durability: 9H Mohs scale</li>
+            <li>Focusing on minimal reflectivity</li>
+            <li>High-frequency touch polling architecture</li>
+            <li>Maximum glass durability standards</li>
           </ul>
         </div>
 
