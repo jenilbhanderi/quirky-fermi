@@ -152,9 +152,9 @@ function HeroSection({ isDark, settings }) {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const heroTitle = settings.hero_title || 'Next-Generation\nOptical Architecture';
-  const heroSubtitle = settings.hero_subtitle || 'Hylunian develops proprietary display architectures, focusing on hardware-level HMI integration, optical clarity, and subpixel optimization.';
-  const ctaText = settings.cta_text || 'Join Waitlist';
+  const heroTitle = settings.hero_title || 'The Future of\nHuman-Machine Interaction';
+  const heroSubtitle = settings.hero_subtitle || 'Hylunian is engineering zero-latency, subpixel-perfect display architectures that blur the line between digital and physical. Join the waitlist for exclusive R&D updates.';
+  const ctaText = settings.cta_text || 'Request Early Access';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -197,7 +197,7 @@ function HeroSection({ isDark, settings }) {
           </p>
 
           {/* Waitlist Form */}
-          <div className="pt-8 flex flex-col items-center justify-center">
+          <div id="waitlist" className="pt-8 flex flex-col items-center justify-center scroll-mt-32">
             {isSubmitted ? (
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -326,9 +326,9 @@ function ResearchCard({ paper, isDark }) {
         <span className={`text-xs font-medium transition-colors ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
           {dateStr}
         </span>
-        <button className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300 group-hover:scale-110 ${isDark ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-black/5 hover:bg-black/10 text-black'}`}>
+        <div className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300 group-hover:scale-110 ${isDark ? 'bg-white/10 group-hover:bg-white/20 text-white' : 'bg-black/5 group-hover:bg-black/10 text-black'}`}>
           <ChevronRight className="w-5 h-5" />
-        </button>
+        </div>
       </div>
     </div>
   );
@@ -417,9 +417,9 @@ function ResearchArticle({ isDark }) {
       <div className={`mt-24 p-8 rounded-3xl border text-center transition-colors ${isDark ? 'bg-zinc-900/60 border-white/10' : 'bg-zinc-50 border-black/10'}`}>
         <h3 className={`text-2xl font-semibold mb-3 ${isDark ? 'text-white' : 'text-black'}`}>Don't miss the next breakthrough</h3>
         <p className={`mb-6 font-light ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Get our daily display technology research delivered straight to your inbox.</p>
-        <Link to="/" className={`inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-colors ${isDark ? 'bg-white text-black hover:bg-zinc-200' : 'bg-black text-white hover:bg-zinc-800'}`}>
-          Join the Waitlist
-        </Link>
+        <a href="/#waitlist" className={`inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-colors ${isDark ? 'bg-white text-black hover:bg-zinc-200' : 'bg-black text-white hover:bg-zinc-800'}`}>
+          Request Early Access
+        </a>
       </div>
     </motion.article>
   );
