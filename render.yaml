@@ -23,6 +23,14 @@ services:
         fromDatabase:
           name: hylunian-db
           property: connectionString
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
 
 databases:
   - name: hylunian-db
