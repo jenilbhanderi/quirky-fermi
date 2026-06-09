@@ -304,7 +304,7 @@ async function broadcastDailyPaper(paperData, waitlistEmails) {
   });
 
   await Promise.all(promises);
-  console.log(\`✅ Broadcasted to \${waitlistEmails.length} users.\`);
+  console.log(`✅ Broadcasted to ${waitlistEmails.length} users.`);
 }
 
 module.exports = { initTransporter, sendWaitlistConfirmation, broadcastDailyPaper };
