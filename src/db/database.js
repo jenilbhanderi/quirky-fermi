@@ -56,7 +56,12 @@ async function initDb() {
   `);
 }
 
-initDb().catch(console.error);
+initDb()
+  .then(() => console.log('✅ PostgreSQL Database schema initialized.'))
+  .catch(err => {
+    console.error('❌ PostgreSQL Database initialization failed:');
+    console.error(err);
+  });
 
 // ─── Async "Prepared Statements" ────────────────────────────
 const statements = {

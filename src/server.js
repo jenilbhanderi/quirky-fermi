@@ -42,13 +42,26 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Global rate limiter on all /api routes
 app.use('/api', apiLimiter);
 
+const { pool } = require('./db/database');
+
 // ─── Health Check ───────────────────────────────────────────
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    uptime: Math.floor(process.uptime()),
-    timestamp: new Date().toISOString(),
-  });
+app.get('/api/health', async (req, res) => {
+  try {
+    const dbRes = await pool.query('SELECT 1 as db_status');
+    res.json({
+      status: 'ok',
+      db: dbRes.rows[0].db_status === 1 ? 'connected' : 'error',
+      uptime: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      db_error: err.message,
+      uptime: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString(),
+    });
+  }
 });
 
 // ─── Mount Routes ───────────────────────────────────────────
