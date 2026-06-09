@@ -6,9 +6,9 @@ const router = express.Router();
 
 // ─── GET /api/papers ────────────────────────────────────────
 // Public — fetch all research papers (abstracts only or full depending on need, we fetch full for simplicity)
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
-    const papers = statements.getAllPapers.all();
+    const papers = await statements.getAllPapers.all();
     res.json(papers);
   } catch (err) {
     next(err);
@@ -17,10 +17,10 @@ router.get('/', (req, res, next) => {
 
 // ─── GET /api/papers/:slug ──────────────────────────────────
 // Public — fetch a single paper by its slug
-router.get('/:slug', (req, res, next) => {
+router.get('/:slug', async (req, res, next) => {
   try {
     const slug = req.params.slug;
-    const paper = statements.getPaperBySlug.get(slug);
+    const paper = await statements.getPaperBySlug.get(slug);
     
     if (!paper) {
       return res.status(404).json({ error: 'Paper not found.' });
@@ -34,7 +34,7 @@ router.get('/:slug', (req, res, next) => {
 
 // ─── POST /api/papers ───────────────────────────────────────
 // Protected — create a new research paper
-router.post('/', authenticateToken, (req, res, next) => {
+router.post('/', authenticateToken, async (req, res, next) => {
   try {
     const { title, abstract, content, authors, category, color } = req.body;
     
@@ -49,12 +49,12 @@ router.post('/', authenticateToken, (req, res, next) => {
       .replace(/(^-|-$)+/g, '');
       
     // Check if slug exists
-    const existing = statements.getPaperBySlug.get(slug);
+    const existing = await statements.getPaperBySlug.get(slug);
     if (existing) {
       return res.status(409).json({ error: 'A paper with a similar title already exists.' });
     }
     
-    const result = statements.insertPaper.run(
+    const result = await statements.insertPaper.run(
       slug,
       title,
       abstract,
@@ -76,19 +76,19 @@ router.post('/', authenticateToken, (req, res, next) => {
 
 // ─── DELETE /api/papers/:id ─────────────────────────────────
 // Protected — delete a research paper
-router.delete('/:id', authenticateToken, (req, res, next) => {
+router.delete('/:id', authenticateToken, async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
       return res.status(400).json({ error: 'Invalid ID.' });
     }
 
-    const paper = statements.getPaperById.get(id);
+    const paper = await statements.getPaperById.get(id);
     if (!paper) {
       return res.status(404).json({ error: 'Paper not found.' });
     }
 
-    statements.deletePaperById.run(id);
+    await statements.deletePaperById.run(id);
 
     res.json({ message: 'Paper deleted.' });
   } catch (err) {

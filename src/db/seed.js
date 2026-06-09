@@ -5,7 +5,7 @@
 
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
-const { db, statements } = require('./database');
+const { statements } = require('./database');
 
 const SALT_ROUNDS = 12;
 
@@ -16,14 +16,14 @@ async function seed() {
   console.log('🌱 Seeding database...\n');
 
   // Check if admin already exists
-  const existing = statements.getAdminByUsername.get(username);
+  const existing = await statements.getAdminByUsername.get(username);
   if (existing) {
     console.log(`⚠️  Admin user "${username}" already exists. Skipping.\n`);
     process.exit(0);
   }
 
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-  statements.insertAdmin.run(username, passwordHash);
+  await statements.insertAdmin.run(username, passwordHash);
 
   console.log('✅ Default admin account created:');
   console.log(`   Username: ${username}`);

@@ -25,7 +25,7 @@ router.post(
       const ip = req.ip || req.connection.remoteAddress;
 
       // Check for duplicate
-      const existing = statements.getWaitlistByEmail.get(email);
+      const existing = await statements.getWaitlistByEmail.get(email);
       if (existing) {
         return res.status(409).json({
           error: 'This email is already on the waitlist.',
@@ -34,7 +34,7 @@ router.post(
       }
 
       // Insert into database
-      const result = statements.insertWaitlist.run(email, ip);
+      const result = await statements.insertWaitlist.run(email, ip);
 
       // Send confirmation email (non-blocking — errors won't fail the response)
       sendWaitlistConfirmation(email).catch(() => {});

@@ -253,4 +253,58 @@ async function sendWaitlistConfirmation(email) {
   }
 }
 
-module.exports = { initTransporter, sendWaitlistConfirmation };
+// ─── Branded Broadcast Email Template ────────────────────────
+function buildBroadcastEmail(paper) {
+  const appName = process.env.APP_NAME || 'Hylunian';
+  const paperLink = `https://${process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',')[0].replace('https://', '') : 'hylunian.com'}/research/${paper.slug}`;
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New Research: ${paper.title}</title>
+</head>
+<body style="margin: 0; padding: 40px 20px; background-color: #050505; color: #fff; font-family: sans-serif;">
+  <div style="max-width: 600px; margin: 0 auto; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; overflow: hidden;">
+    <div style="height: 3px; background: linear-gradient(to right, #FF003C, #00FF66, #0033FF);"></div>
+    <div style="padding: 40px;">
+      <h2 style="font-size: 24px; margin-top: 0;">${paper.title}</h2>
+      <p style="color: #a1a1aa; font-size: 14px; line-height: 1.6;">${paper.abstract}</p>
+      <div style="margin-top: 30px;">
+        <a href="${paperLink}" style="background: #fff; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 14px;">Read Full Paper</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  const text = `New Research from ${appName}: ${paper.title}\n\n${paper.abstract}\n\nRead more at: ${paperLink}`;
+  return { html, text };
+}
+
+// ─── Send Broadcast ─────────────────────────────────────────
+async function broadcastDailyPaper(paperData, waitlistEmails) {
+  const appName = process.env.APP_NAME || 'Hylunian';
+  const { html, text } = buildBroadcastEmail(paperData);
+
+  if (!isEmailConfigured || !transporter) {
+    console.log(`📧 [Broadcast Preview] Would send to ${waitlistEmails.length} users: ${paperData.title}`);
+    return null;
+  }
+
+  const promises = waitlistEmails.map(email => {
+    return transporter.sendMail({
+      from: \`"\${appName} Research" <\${process.env.SMTP_FROM || process.env.SMTP_USER}>\`,
+      to: email,
+      subject: \`New Display Tech Research: \${paperData.title}\`,
+      html,
+      text,
+    }).catch(err => console.error(\`⚠️ Failed to broadcast to \${email}\`, err.message));
+  });
+
+  await Promise.all(promises);
+  console.log(\`✅ Broadcasted to \${waitlistEmails.length} users.\`);
+}
+
+module.exports = { initTransporter, sendWaitlistConfirmation, broadcastDailyPaper };

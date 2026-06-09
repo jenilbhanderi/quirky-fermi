@@ -9,7 +9,7 @@ router.use(authenticateToken);
 
 // ─── GET /api/admin/waitlist ────────────────────────────────
 // List waitlist entries with pagination and optional search
-router.get('/waitlist', (req, res, next) => {
+router.get('/waitlist', async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page, 10) || 1);
     const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
@@ -20,11 +20,11 @@ router.get('/waitlist', (req, res, next) => {
 
     if (search) {
       const pattern = `%${search}%`;
-      entries = statements.searchWaitlist.all(pattern, limit, offset);
-      totalResult = statements.countWaitlistSearch.get(pattern);
+      entries = await statements.searchWaitlist.all(pattern, limit, offset);
+      totalResult = await statements.countWaitlistSearch.get(pattern);
     } else {
-      entries = statements.getAllWaitlist.all(limit, offset);
-      totalResult = statements.countWaitlist.get();
+      entries = await statements.getAllWaitlist.all(limit, offset);
+      totalResult = await statements.countWaitlist.get();
     }
 
     const total = totalResult.total;
@@ -48,11 +48,11 @@ router.get('/waitlist', (req, res, next) => {
 
 // ─── GET /api/admin/waitlist/stats ──────────────────────────
 // Waitlist statistics
-router.get('/waitlist/stats', (req, res, next) => {
+router.get('/waitlist/stats', async (req, res, next) => {
   try {
-    const total = statements.countWaitlist.get().total;
-    const today = statements.countWaitlistToday.get().total;
-    const thisWeek = statements.countWaitlistThisWeek.get().total;
+    const total = (await statements.countWaitlist.get()).total;
+    const today = (await statements.countWaitlistToday.get()).total;
+    const thisWeek = (await statements.countWaitlistThisWeek.get()).total;
 
     res.json({
       total,
@@ -69,9 +69,9 @@ router.get('/waitlist/stats', (req, res, next) => {
 
 // ─── GET /api/admin/waitlist/export ─────────────────────────
 // Export entire waitlist as CSV
-router.get('/waitlist/export', (req, res, next) => {
+router.get('/waitlist/export', async (req, res, next) => {
   try {
-    const entries = statements.exportWaitlist.all();
+    const entries = await statements.exportWaitlist.all();
 
     // Build CSV
     const headers = 'id,email,status,created_at';
@@ -94,19 +94,19 @@ router.get('/waitlist/export', (req, res, next) => {
 
 // ─── DELETE /api/admin/waitlist/:id ─────────────────────────
 // Remove a waitlist entry by ID
-router.delete('/waitlist/:id', (req, res, next) => {
+router.delete('/waitlist/:id', async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
       return res.status(400).json({ error: 'Invalid ID.' });
     }
 
-    const entry = statements.getWaitlistById.get(id);
+    const entry = await statements.getWaitlistById.get(id);
     if (!entry) {
       return res.status(404).json({ error: 'Waitlist entry not found.' });
     }
 
-    statements.deleteWaitlistById.run(id);
+    await statements.deleteWaitlistById.run(id);
 
     res.json({ message: 'Entry removed.', deleted: { id, email: entry.email } });
   } catch (err) {

@@ -41,14 +41,14 @@ router.post(
       }
 
       // Check for existing username
-      const existing = statements.getAdminByUsername.get(username);
+      const existing = await statements.getAdminByUsername.get(username);
       if (existing) {
         return res.status(409).json({ error: 'Username already taken.' });
       }
 
       // Hash password and create admin
       const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-      const result = statements.insertAdmin.run(username, passwordHash);
+      const result = await statements.insertAdmin.run(username, passwordHash);
 
       // Generate JWT
       const token = generateToken({
@@ -81,7 +81,7 @@ router.post(
     try {
       const { username, password } = req.body;
 
-      const user = statements.getAdminByUsername.get(username);
+      const user = await statements.getAdminByUsername.get(username);
       if (!user) {
         return res.status(401).json({ error: 'Invalid credentials.' });
       }

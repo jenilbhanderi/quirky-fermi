@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-r
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Layers, ChevronRight, Sun, Moon, ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import Legal from './Legal';
+import AdminDashboard from './AdminDashboard';
 
 // ─── API Configuration ──────────────────────────────────────
 // In production, frontend and backend share the same origin, so use relative /api.
@@ -83,6 +85,8 @@ export default function App() {
                 )
               } />
               <Route path="/research/:slug" element={<ResearchArticle isDark={isDark} />} />
+              <Route path="/legal" element={<Legal isDark={isDark} />} />
+              <Route path="/admin" element={<AdminDashboard isDark={isDark} />} />
             </Routes>
           </main>
           <Footer isDark={isDark} />
@@ -336,8 +340,25 @@ function ResearchArticle({ isDark }) {
   useEffect(() => {
     fetch(`${API_BASE}/papers/${slug}`)
       .then(r => r.ok ? r.json() : Promise.reject('Not found'))
-      .then(data => setPaper(data))
+      .then(data => {
+        setPaper(data);
+        // Dynamic SEO injection
+        document.title = `${data.title} - Hylunian Research`;
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.content = data.abstract || data.title;
+        let ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.content = data.title;
+        let ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.content = data.abstract || data.title;
+      })
       .catch(() => setError(true));
+      
+    return () => {
+      // Cleanup on unmount
+      document.title = 'Hylunian - Display Technology Research';
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.content = "Hylunian develops proprietary display architectures, focusing on hardware-level HMI integration, optical clarity, and subpixel optimization.";
+    };
   }, [slug]);
 
   if (error) {
@@ -390,6 +411,14 @@ function ResearchArticle({ isDark }) {
           <p className="italic">This paper does not have full text available.</p>
         )}
       </div>
+
+      <div className={`mt-24 p-8 rounded-3xl border text-center transition-colors ${isDark ? 'bg-zinc-900/60 border-white/10' : 'bg-zinc-50 border-black/10'}`}>
+        <h3 className={`text-2xl font-semibold mb-3 ${isDark ? 'text-white' : 'text-black'}`}>Don't miss the next breakthrough</h3>
+        <p className={`mb-6 font-light ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Get our daily display technology research delivered straight to your inbox.</p>
+        <Link to="/" className={`inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-colors ${isDark ? 'bg-white text-black hover:bg-zinc-200' : 'bg-black text-white hover:bg-zinc-800'}`}>
+          Join the Waitlist
+        </Link>
+      </div>
     </motion.article>
   );
 }
@@ -407,8 +436,8 @@ function Footer({ isDark }) {
         </div>
         
         <div className="flex gap-8 text-sm font-light">
-          <a href="#" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Lab Contact</a>
-          <a href="#" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Privacy Policy</a>
+          <a href="mailto:contact@hylunian.com" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Lab Contact</a>
+          <Link to="/legal" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Privacy & Legal</Link>
           <a href="#" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Hardware Specs</a>
         </div>
         

@@ -6,9 +6,9 @@ const router = express.Router();
 
 // ─── GET /api/settings ──────────────────────────────────────
 // Public — fetch all site settings
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
-    const settings = statements.getAllSettings.all();
+    const settings = await statements.getAllSettings.all();
     const settingsMap = {};
     settings.forEach((s) => {
       settingsMap[s.key] = s.value;
@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
 
 // ─── PUT /api/settings ──────────────────────────────────────
 // Protected — update site settings
-router.put('/', authenticateToken, (req, res, next) => {
+router.put('/', authenticateToken, async (req, res, next) => {
   try {
     const settingsToUpdate = req.body;
     
@@ -33,7 +33,7 @@ router.put('/', authenticateToken, (req, res, next) => {
     // Upsert each setting
     for (const [key, value] of Object.entries(settingsToUpdate)) {
       if (typeof value === 'string') {
-        statements.upsertSetting.run(key, value);
+        await statements.upsertSetting.run(key, value);
       }
     }
 

@@ -11,8 +11,6 @@ services:
         value: production
       - key: PORT
         value: 3001
-      - key: DB_PATH
-        value: /tmp/hylunian.db
       - key: CORS_ORIGIN
         value: https://hylunian.com,https://www.hylunian.com
       - key: APP_NAME
@@ -21,3 +19,13 @@ services:
         generateValue: true
       - key: ADMIN_INVITE_CODE
         value: hylunian-alpha-2026
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hylunian-db
+          property: connectionString
+
+databases:
+  - name: hylunian-db
+    databaseName: hylunian
+    user: hylunian
+    plan: free
