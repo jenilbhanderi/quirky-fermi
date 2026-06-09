@@ -178,8 +178,8 @@ function HeroSection({ isDark, settings }) {
     setCursorPos({ x: -1000, y: -1000 });
   };
 
-  const heroTitle = settings.hero_title || 'The Future of\nHuman-Machine Interaction';
-  const heroSubtitle = settings.hero_subtitle || 'Hylunian is engineering zero-latency, subpixel-perfect display architectures that blur the line between digital and physical. Join the waitlist for exclusive R&D updates.';
+  const heroTitle = settings.hero_title || 'Self-Powered\nEmissive Architecture';
+  const heroSubtitle = settings.hero_subtitle || 'Hylunian is pioneering transparent piezoelectric and triboelectric (TENG) display interfaces. We are engineering screens that convert your kinetic touch into self-sustaining electrical power.';
   const ctaText = settings.cta_text || 'Request Early Access';
 
   const handleSubmit = async (e) => {
