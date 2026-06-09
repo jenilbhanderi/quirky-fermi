@@ -5,6 +5,7 @@ import { ArrowRight, Layers, ChevronRight, Sun, Moon, ArrowLeft } from 'lucide-r
 import ReactMarkdown from 'react-markdown';
 import Legal from './Legal';
 import AdminDashboard from './AdminDashboard';
+import HardwareSpecs from './HardwareSpecs';
 
 // ─── API Configuration ──────────────────────────────────────
 // In production, frontend and backend share the same origin, so use relative /api.
@@ -87,6 +88,7 @@ export default function App() {
               <Route path="/research/:slug" element={<ResearchArticle isDark={isDark} />} />
               <Route path="/legal" element={<Legal isDark={isDark} />} />
               <Route path="/admin" element={<AdminDashboard isDark={isDark} />} />
+              <Route path="/specs" element={<HardwareSpecs isDark={isDark} />} />
             </Routes>
           </main>
           <Footer isDark={isDark} />
@@ -438,7 +440,7 @@ function Footer({ isDark }) {
         <div className="flex gap-8 text-sm font-light">
           <a href="mailto:contact@hylunian.com" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Lab Contact</a>
           <Link to="/legal" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Privacy & Legal</Link>
-          <a href="#" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Hardware Specs</a>
+          <Link to="/specs" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Hardware Specs</Link>
         </div>
         
         <div className={`text-sm transition-colors ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>
