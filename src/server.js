@@ -57,7 +57,8 @@ app.get('/api/health', async (req, res) => {
   } catch (err) {
     res.status(500).json({
       status: 'error',
-      db_error: err.message,
+      db_error: String(err),
+      db_stack: err ? err.stack : undefined,
       uptime: Math.floor(process.uptime()),
       timestamp: new Date().toISOString(),
     });
