@@ -59,6 +59,7 @@ app.get('/api/health', async (req, res) => {
       status: 'error',
       db_error: String(err),
       db_stack: err ? err.stack : undefined,
+      has_db_url: !!process.env.DATABASE_URL,
       uptime: Math.floor(process.uptime()),
       timestamp: new Date().toISOString(),
     });

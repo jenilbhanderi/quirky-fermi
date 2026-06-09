@@ -7,6 +7,17 @@ const { sendWaitlistConfirmation } = require('../services/emailService');
 
 const router = express.Router();
 
+// ─── GET /api/waitlist/count ────────────────────────────────
+// Public — get total number of waitlist signups for social proof
+router.get('/count', async (req, res, next) => {
+  try {
+    const { total } = await statements.countWaitlist.get();
+    res.json({ total });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ─── POST /api/waitlist ─────────────────────────────────────
 // Public — submit email to waitlist
 router.post(

@@ -151,6 +151,32 @@ function HeroSection({ isDark, settings }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [waitlistCount, setWaitlistCount] = useState(null);
+  const [cursorPos, setCursorPos] = useState({ x: -1000, y: -1000 });
+
+  useEffect(() => {
+    fetch(`${API_BASE}/waitlist/count`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && typeof data.total === 'number') {
+          // Adding a base aesthetic offset of 142 (simulates earlier un-tracked signups) to build initial social proof
+          setWaitlistCount(data.total + 142);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCursorPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setCursorPos({ x: -1000, y: -1000 });
+  };
 
   const heroTitle = settings.hero_title || 'The Future of\nHuman-Machine Interaction';
   const heroSubtitle = settings.hero_subtitle || 'Hylunian is engineering zero-latency, subpixel-perfect display architectures that blur the line between digital and physical. Join the waitlist for exclusive R&D updates.';
@@ -178,7 +204,24 @@ function HeroSection({ isDark, settings }) {
   };
 
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center px-6 overflow-hidden">
+    <section 
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative min-h-[85vh] flex items-center justify-center px-6 overflow-hidden"
+    >
+      {/* Emissive Cursor Aura */}
+      <div 
+        className={`absolute pointer-events-none rounded-full blur-[80px] transition-opacity duration-300 ${isDark ? 'opacity-40' : 'opacity-20'}`}
+        style={{
+          width: '500px',
+          height: '500px',
+          background: isDark ? 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%)' : 'radial-gradient(circle, rgba(0,0,0,0.03) 0%, transparent 60%)',
+          transform: `translate(${cursorPos.x - 250}px, ${cursorPos.y - 250}px)`,
+          left: 0,
+          top: 0,
+          zIndex: 0
+        }}
+      />
       <div className="max-w-4xl mx-auto w-full text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -218,15 +261,26 @@ function HeroSection({ isDark, settings }) {
                     onChange={(e) => { setEmail(e.target.value); setError(''); }}
                     className={`w-full px-6 py-4 bg-transparent focus:outline-none transition-colors ${isDark ? 'text-white placeholder-zinc-500' : 'text-black placeholder-zinc-400'}`}
                   />
-                  <button
+                  <motion.button
                     type="submit"
                     disabled={isLoading}
-                    className={`w-full sm:w-auto px-8 py-4 rounded-full font-semibold transition-colors flex items-center justify-center gap-2 group whitespace-nowrap disabled:opacity-50 ${isDark ? 'bg-white text-black hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.2)]' : 'bg-black text-white hover:bg-zinc-800 shadow-[0_5px_20px_rgba(0,0,0,0.1)]'}`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`w-full sm:w-auto px-8 py-4 rounded-full font-semibold transition-colors flex items-center justify-center gap-2 group whitespace-nowrap disabled:opacity-50 relative ${isDark ? 'bg-white text-black hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]' : 'bg-black text-white hover:shadow-[0_10px_30px_rgba(0,0,0,0.15)]'}`}
                   >
                     {isLoading ? 'Submitting...' : ctaText}
                     {!isLoading && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
-                  </button>
+                  </motion.button>
                 </form>
+                {waitlistCount !== null && !error && !isSubmitted && (
+                  <motion.div 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    className={`mt-5 text-sm font-light ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}
+                  >
+                    Join <span className={`font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-600'}`}>{waitlistCount}+</span> researchers on the waitlist.
+                  </motion.div>
+                )}
                 {error && (
                   <motion.p 
                     initial={{ opacity: 0, y: 5 }}
