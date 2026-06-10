@@ -244,10 +244,12 @@ function HeroSection({ isDark, settings }) {
 
   useEffect(() => {
     fetch(`${API_BASE}/waitlist/count`)
-      .then(res => res.json())
+      .then(res => res.ok ? res.json() : Promise.reject('Backend error'))
       .then(data => {
         if (data && typeof data.total === 'number') {
           setWaitlistCount(data.total + 142);
+        } else {
+          setWaitlistCount(142);
         }
       })
       .catch(() => {
