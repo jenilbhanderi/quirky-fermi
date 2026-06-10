@@ -111,6 +111,11 @@ const statements = {
       return { total: parseInt(res.rows[0].total, 10) };
     }
   },
+  updateWaitlistStatus: {
+    run: async (id, status) => {
+      await pool.query('UPDATE waitlist SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', [status, id]);
+    }
+  },
   deleteWaitlistById: {
     run: async (id) => {
       await pool.query('DELETE FROM waitlist WHERE id = $1', [id]);

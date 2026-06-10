@@ -114,4 +114,32 @@ router.delete('/waitlist/:id', async (req, res, next) => {
   }
 });
 
+// ─── PUT /api/admin/waitlist/:id/status ──────────────────────
+// Update a waitlist entry's status
+router.put('/waitlist/:id/status', async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { status } = req.body;
+    
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid ID.' });
+    }
+    
+    if (!['pending', 'confirmed', 'invited'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status.' });
+    }
+
+    const entry = await statements.getWaitlistById.get(id);
+    if (!entry) {
+      return res.status(404).json({ error: 'Waitlist entry not found.' });
+    }
+
+    await statements.updateWaitlistStatus.run(id, status);
+
+    res.json({ message: 'Status updated.', updated: { id, email: entry.email, status } });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

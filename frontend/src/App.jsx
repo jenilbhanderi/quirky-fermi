@@ -354,11 +354,39 @@ function HeroSection({ isDark, settings }) {
                     disabled={isLoading}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`w-full sm:w-auto px-8 py-4 font-mono text-sm uppercase tracking-wider font-semibold transition-colors flex items-center justify-center gap-2 group whitespace-nowrap disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 ${isDark ? 'bg-beige-50 text-zinc-950 hover:bg-beige-200 shadow-[0_0_15px_rgba(192,165,126,0.3)]' : 'bg-zinc-950 text-beige-50 hover:bg-zinc-800'}`}
+                    className={`w-full sm:w-auto px-8 py-4 font-mono text-sm uppercase tracking-wider font-semibold transition-colors flex items-center justify-center gap-2 group whitespace-nowrap disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 relative overflow-hidden ${isDark ? 'bg-beige-50 text-zinc-950 hover:bg-beige-200 shadow-[0_0_15px_rgba(192,165,126,0.3)]' : 'bg-zinc-950 text-beige-50 hover:bg-zinc-800'}`}
                   >
-                    {isLoading ? 'Submitting...' : ctaText}
+                    <span className="absolute inset-0 w-full h-full bg-white/20 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></span>
+                    <span className="relative z-10 flex items-center gap-2">
+                      {isLoading ? 'Submitting...' : ctaText}
+                      {!isLoading && (
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                        </span>
+                      )}
+                    </span>
                   </motion.button>
                 </form>
+
+                {/* Scarcity / Progress Bar */}
+                <div className="w-full max-w-lg mt-6 px-4">
+                  <div className="flex justify-between items-end mb-2">
+                    <span className={`font-mono text-[10px] uppercase tracking-widest ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Phase 1 Dev-Kits</span>
+                    <span className={`font-mono text-xs font-semibold ${isDark ? 'text-beige-50' : 'text-zinc-900'}`}>42 / 50 Claimed</span>
+                  </div>
+                  <div className="w-full h-1 bg-zinc-950/10 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: '84%' }}
+                      transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+                      className={`h-full ${isDark ? 'bg-beige-500 shadow-[0_0_8px_#c0a57e]' : 'bg-zinc-950'}`}
+                    />
+                  </div>
+                  <div className="mt-2 text-right">
+                    <span className="inline-block text-[10px] font-mono uppercase tracking-widest text-red-500 animate-pulse font-semibold">Only 8 remaining</span>
+                  </div>
+                </div>
                 {waitlistCount !== null && !error && !isSubmitted && (
                   <motion.div 
                     initial={{ opacity: 0 }} 
@@ -378,12 +406,33 @@ function HeroSection({ isDark, settings }) {
                   </motion.p>
                 )}
                 
+                {/* Trust Badges */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.5 }}
+                  className="mt-6 flex items-center gap-6 justify-center"
+                >
+                  <div className="flex items-center gap-1.5 opacity-60">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span className="font-mono text-[9px] uppercase tracking-widest text-zinc-600">AES-256 Encrypted</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 opacity-60">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span className="font-mono text-[9px] uppercase tracking-widest text-zinc-600">No Spam Guarantee</span>
+                  </div>
+                </motion.div>
+
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className={`mt-6 text-xs font-light max-w-sm text-center mx-auto ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}
+                  className={`mt-4 text-xs font-light max-w-sm text-center mx-auto ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}
                 >
-                  Your email is secure and strictly used for R&D updates and beta access. <Link to="/legal" className="underline hover:text-zinc-400">Privacy Policy</Link>
+                  Your email is strictly used for R&D updates. <Link to="/legal" className="underline hover:text-zinc-400">Privacy Policy</Link>
                 </motion.p>
               </>
             )}
