@@ -201,7 +201,10 @@
         <div class="table-wrapper">
           <div class="table-header">
             <h3 style="font-size: 15px; font-weight: 600;">Waitlist Entries</h3>
-            <div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="text" id="searchInput" placeholder="Search email..." style="padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; font-size: 12px; width: 150px;">
+              <button class="btn btn-sm" style="background: var(--border); color: white;" onclick="loadWaitlist()">Search</button>
+              <button class="btn btn-primary btn-sm" onclick="pushEmails()">Push Emails</button>
               <button class="btn btn-export btn-sm" onclick="exportCSV()">Export CSV</button>
               <button class="btn btn-primary btn-sm" onclick="loadWaitlist()">Refresh</button>
             </div>
@@ -367,25 +370,57 @@
     }
     async function loadWaitlist() {
       const token = await checkAuth();
+      const search = document.getElementById('searchInput')?.value || '';
       try {
-        const res = await fetch(`${API}/admin/waitlist?limit=50`, { headers: { 'Authorization': `Bearer ${token}` }});
+        const res = await fetch(`${API}/admin/waitlist?limit=50&search=${encodeURIComponent(search)}`, { headers: { 'Authorization': `Bearer ${token}` }});
         const data = await res.json();
         if(!data.entries || data.entries.length === 0) {
-          document.getElementById('tableBody').innerHTML = `<div class="empty-state">No entries yet.</div>`;
+          document.getElementById('tableBody').innerHTML = `<div class="empty-state">No entries found.</div>`;
           return;
         }
-        let html = `<table><thead><tr><th>ID</th><th>Email</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody>`;
+        let html = `<table><thead><tr><th>ID</th><th>Email</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>`;
         data.entries.forEach(e => {
           html += `<tr><td>#${e.id}</td><td style="color:white;">${e.email}</td><td>${e.status}</td><td>${new Date(e.created_at+'Z').toLocaleDateString()}</td>
-          <td><button class="btn btn-danger btn-sm" onclick="deleteWaitlist(${e.id})">Del</button></td></tr>`;
+          <td style="display: flex; gap: 8px;">
+            ${e.status !== 'invited' && e.status !== 'approved' ? `<button class="btn btn-sm" style="background: rgba(0,255,102,0.1); color: var(--green); border: 1px solid rgba(0,255,102,0.2);" onclick="approveWaitlist(${e.id})">Approve</button>` : ''}
+            <button class="btn btn-danger btn-sm" onclick="deleteWaitlist(${e.id})">Del</button>
+          </td></tr>`;
         });
         document.getElementById('tableBody').innerHTML = html + '</tbody></table>';
       } catch(e){}
     }
+    
+    async function approveWaitlist(id) {
+      if(!confirm('Approve this entry?')) return;
+      const res = await fetch(`${API}/admin/waitlist/${id}/status`, { 
+        method: 'PUT', 
+        headers: { 
+          'Authorization': `Bearer ${localStorage.getItem('hy_token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: 'approved' })
+      });
+      if(res.ok) { showToast('Approved'); loadWaitlist(); loadStats(); }
+    }
+
     async function deleteWaitlist(id) {
       if(!confirm('Delete entry?')) return;
       const res = await fetch(`${API}/admin/waitlist/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('hy_token')}` }});
       if(res.ok) { showToast('Deleted'); loadWaitlist(); loadStats(); }
+    }
+    
+    async function pushEmails() {
+      if(!confirm('Are you sure you want to blast confirmation emails to everyone on the waitlist?')) return;
+      try {
+        const res = await fetch(`${API}/admin/waitlist/backfill`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('hy_token')}` }
+        });
+        const data = await res.json();
+        showToast(data.message || 'Push started');
+      } catch(e){
+        showToast('Failed to start push', 'error');
+      }
     }
     async function exportCSV() {
       const res = await fetch(`${API}/admin/waitlist/export`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('hy_token')}` }});
