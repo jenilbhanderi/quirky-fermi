@@ -142,4 +142,36 @@ router.put('/waitlist/:id/status', async (req, res, next) => {
   }
 });
 
+// ─── POST /api/admin/waitlist/backfill ──────────────────────
+// Send confirmation emails to all waitlist members who haven't received them
+router.post('/waitlist/backfill', async (req, res, next) => {
+  try {
+    const { sendWaitlistConfirmation } = require('../services/emailService');
+    const entries = await statements.getAllWaitlist.all(10000, 0);
+    
+    if (!entries || entries.length === 0) {
+      return res.json({ message: 'No waitlist entries found to backfill.' });
+    }
+
+    // Run this asynchronously in the background so we don't block the request
+    (async () => {
+      console.log(`Starting email backfill for ${entries.length} users...`);
+      for (const entry of entries) {
+        try {
+          await sendWaitlistConfirmation(entry.email);
+          // 1 second delay to avoid SMTP rate limits
+          await new Promise(r => setTimeout(r, 1000));
+        } catch (err) {
+          console.error(`Failed backfill for ${entry.email}:`, err.message);
+        }
+      }
+      console.log('Email backfill complete.');
+    })();
+
+    res.json({ message: `Started sending emails to ${entries.length} users in the background. Check logs for progress.` });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

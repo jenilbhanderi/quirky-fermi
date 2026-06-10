@@ -99,6 +99,21 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleBackfill = async () => {
+    if (!window.confirm('Are you sure you want to blast emails to ALL existing waitlist members who haven\'t received one?')) return;
+    try {
+      const res = await fetch(`${API_BASE}/admin/waitlist/backfill`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      alert(data.message || 'Backfill started.');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to start email push.');
+    }
+  };
+
   if (!token) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-6">
@@ -190,6 +205,9 @@ export default function AdminDashboard() {
             <a href={`${API_BASE}/admin/waitlist/export`} target="_blank" rel="noreferrer" className="px-4 py-2 text-[11px] font-mono uppercase tracking-widest bg-zinc-950 text-beige-50 hover:bg-zinc-800 whitespace-nowrap">
               Export CSV
             </a>
+            <button onClick={handleBackfill} className="px-4 py-2 text-[11px] font-mono uppercase tracking-widest bg-beige-600 text-beige-50 hover:bg-beige-700 whitespace-nowrap">
+              Push Emails
+            </button>
           </div>
         </div>
         <div className="overflow-x-auto">
