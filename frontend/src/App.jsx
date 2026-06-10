@@ -335,9 +335,6 @@ function HeroSection({ isDark, settings }) {
                   <label htmlFor="waitlist-email" className="font-mono text-[11px] uppercase tracking-widest text-zinc-500">
                     Priority Waitlist
                   </label>
-                  <p className="text-xs text-zinc-600 mt-1">
-                    Dev-kit allocations are strictly first-come, first-serve. Early access grants proprietary testing data and priority hardware rights.
-                  </p>
                 </div>
                 <form onSubmit={handleSubmit} className={`flex flex-col sm:flex-row items-stretch w-full max-w-lg border backdrop-blur-xl transition-all shadow-2xl ${isDark ? 'bg-zinc-900/40 border-beige-50/20 focus-within:ring-2 focus-within:ring-beige-50/40' : 'bg-white/40 border-zinc-950/20 focus-within:ring-2 focus-within:ring-zinc-950/40'}`}>
                   <input
