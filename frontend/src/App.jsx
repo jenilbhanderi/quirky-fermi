@@ -60,7 +60,7 @@ function NotFound() {
       <div className="font-mono text-[11px] uppercase tracking-widest mb-6 text-zinc-500">
         [ Error 404 ]
       </div>
-      <h1 className="font-serif text-6xl md:text-8xl mb-8 text-zinc-950 tracking-tight">
+      <h1 className="font-serif text-4xl sm:text-5xl md:text-8xl mb-8 text-zinc-950 tracking-tight">
         Document Void
       </h1>
       <p className="max-w-md text-zinc-600 font-light mb-12">
@@ -303,7 +303,7 @@ function HeroSection({ isDark, settings }) {
             text={heroTitle}
             element="h1"
             delay={0.2}
-            className={`text-6xl md:text-8xl lg:text-[7rem] font-serif tracking-tight leading-[0.95] mx-auto justify-center ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}
+            className={`text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-serif tracking-tight leading-[0.95] mx-auto justify-center ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}
           />
 
           {/* Body */}
@@ -440,7 +440,7 @@ function AboutSection({ isDark }) {
             <div className={`font-mono text-xs uppercase tracking-[0.2em] mb-6 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
               Phase 01 / Context
             </div>
-            <h2 className={`font-serif text-5xl md:text-6xl tracking-tight leading-[0.95] mb-8 ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>
+            <h2 className={`font-serif text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[0.95] mb-8 ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>
               Engineering the <br/>Emissive Core
             </h2>
             <p className={`text-lg font-light leading-relaxed mb-6 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
@@ -496,7 +496,7 @@ function TeamSection({ isDark }) {
               <div className={`font-mono text-xs uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
                 Leadership
               </div>
-              <h2 className={`font-serif text-4xl tracking-tight leading-none ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>
+              <h2 className={`font-serif text-3xl sm:text-4xl tracking-tight leading-none ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>
                 Principal Investigator
               </h2>
            </motion.div>
@@ -551,7 +551,7 @@ function ResearchSection({ isDark, papers }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className={`font-serif text-5xl md:text-6xl tracking-tight leading-[0.95] transition-colors ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}
+            className={`font-serif text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[0.95] transition-colors ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}
           >
             Optical Architecture
           </motion.h2>
@@ -597,7 +597,7 @@ function ResearchCard({ paper, isDark }) {
           [ {paper.category || 'Research'} ]
         </div>
         
-        <h3 className={`font-serif text-3xl mb-6 leading-[1.1] transition-all ${isDark ? 'text-beige-50 group-hover:text-beige-300' : 'text-zinc-950 group-hover:text-zinc-700'}`}>
+        <h3 className={`font-serif text-2xl sm:text-3xl mb-6 leading-[1.1] transition-all ${isDark ? 'text-beige-50 group-hover:text-beige-300' : 'text-zinc-950 group-hover:text-zinc-700'}`}>
           {paper.title}
         </h3>
         
@@ -680,7 +680,7 @@ function ResearchArticle() {
         <div className="inline-flex items-center gap-2 px-3 py-1 border text-[11px] font-mono uppercase tracking-widest mb-6 transition-colors bg-beige-100 border-zinc-950/10 text-zinc-600">
           {paper.category || 'Research'}
         </div>
-        <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-none mb-6 text-zinc-950">
+        <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl tracking-tight leading-none mb-6 text-zinc-950">
           {paper.title}
         </h1>
         <div className="text-xs font-mono uppercase tracking-widest flex flex-wrap gap-4 items-center text-zinc-500">

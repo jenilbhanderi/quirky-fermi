@@ -19,7 +19,7 @@ export default function HardwareSpecs() {
         <div className="font-mono text-[11px] uppercase tracking-widest mb-6 text-zinc-500">
           [ Documentation ]
         </div>
-        <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-none mb-6 text-zinc-950">
+        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl tracking-tight leading-none mb-6 text-zinc-950">
           Hardware Specifications
         </h1>
         <p className="text-lg font-light text-zinc-600">
