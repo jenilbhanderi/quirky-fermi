@@ -92,6 +92,8 @@ export default function App() {
             </Routes>
           </main>
           <Footer isDark={isDark} />
+          
+          <SocialProofToast isDark={isDark} />
         </div>
       </div>
     </Router>
@@ -484,10 +486,7 @@ function Footer({ isDark }) {
     <footer className={`px-6 py-12 relative z-10 border-t transition-colors duration-500 mt-auto ${isDark ? 'bg-[#050505] border-white/5' : 'bg-zinc-100 border-black/5'}`}>
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-2">
-          
-          {/* Full-Sized Custom Logo for Footer (Matches Navbar perfectly) */}
           <img src="/favicon.svg" alt="Hylunian Logo" className="w-8 h-8" />
-          
           <span className={`font-semibold tracking-tight text-lg transition-colors ${isDark ? 'text-white' : 'text-black'}`}>Hylunian</span>
         </div>
         
@@ -502,5 +501,71 @@ function Footer({ isDark }) {
         </div>
       </div>
     </footer>
+  );
+}
+
+const SOCIAL_PROOF_PROFILES = [
+  "Hardware Engineer from Berlin",
+  "Materials Scientist from Tokyo",
+  "Venture Capitalist from SF",
+  "Display Architect from Seoul",
+  "Optical Researcher from MIT",
+  "Nanotechnology Lead from Taipei"
+];
+
+function SocialProofToast({ isDark }) {
+  const [profile, setProfile] = useState(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const cycleToast = () => {
+      const nextProfile = SOCIAL_PROOF_PROFILES[Math.floor(Math.random() * SOCIAL_PROOF_PROFILES.length)];
+      setProfile(nextProfile);
+      setVisible(true);
+      
+      setTimeout(() => {
+        setVisible(false);
+      }, 4000);
+    };
+
+    const initialTimer = setTimeout(cycleToast, 3000);
+    const interval = setInterval(() => {
+      cycleToast();
+    }, Math.floor(Math.random() * 13000) + 12000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div className="fixed bottom-6 left-6 z-50 pointer-events-none">
+      <AnimatePresence>
+        {visible && profile && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className={`flex items-center gap-3 px-5 py-3 rounded-2xl shadow-2xl backdrop-blur-md border ${
+              isDark 
+                ? 'bg-black/60 border-white/10 text-white' 
+                : 'bg-white/80 border-black/10 text-black'
+            }`}
+          >
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white">
+              <span className="text-xs font-bold">{profile.charAt(0)}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold leading-tight">{profile}</span>
+              <span className={`text-[10px] ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                Just requested early access
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
