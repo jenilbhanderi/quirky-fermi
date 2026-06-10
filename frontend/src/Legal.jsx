@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
-export default function Legal({ isDark }) {
+export default function Legal() {
   return (
     <motion.article 
       initial={{ opacity: 0, y: 20 }}
@@ -11,20 +11,23 @@ export default function Legal({ isDark }) {
       transition={{ duration: 0.6 }}
       className="max-w-3xl mx-auto px-6 py-24"
     >
-      <Link to="/" className={`inline-flex items-center gap-2 text-sm mb-12 transition-colors hover:underline ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>
+      <Link to="/" className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest mb-12 transition-colors text-zinc-500 hover:text-zinc-950">
         <ArrowLeft className="w-4 h-4" /> Back to Hylunian
       </Link>
       
       <header className="mb-16">
-        <h1 className={`text-4xl md:text-5xl font-semibold tracking-tight leading-tight mb-6 ${isDark ? 'text-white' : 'text-black'}`}>
+        <div className="font-mono text-[11px] uppercase tracking-widest mb-6 text-zinc-500">
+          [ Compliance ]
+        </div>
+        <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-none mb-6 text-zinc-950">
           Legal Practices & Privacy
         </h1>
-        <p className={`text-lg font-light ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+        <p className="text-lg font-light text-zinc-600">
           Our commitment to your privacy, data security, and legal compliance.
         </p>
       </header>
 
-      <div className={`prose prose-lg max-w-none transition-colors duration-500 ${isDark ? 'prose-invert prose-p:text-zinc-400 prose-headings:text-zinc-200 prose-strong:text-white' : 'prose-zinc prose-p:text-zinc-600 prose-headings:text-zinc-900'}`}>
+      <div className="prose prose-lg max-w-none prose-zinc prose-p:text-zinc-600 prose-headings:text-zinc-900 prose-headings:font-serif">
         <h2>1. Privacy Policy</h2>
         <p>At Hylunian, we prioritize your privacy. We collect only the information necessary to provide our services and communicate with you, such as your email address when you join our waitlist or subscribe to our research papers.</p>
         <p>We do not sell, rent, or trade your personal information to third parties. All data is securely stored and protected by industry-standard encryption protocols.</p>

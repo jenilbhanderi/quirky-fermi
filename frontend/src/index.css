@@ -1,2 +1,26 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@theme {
+  --font-serif: "Instrument Serif", serif;
+  --font-mono: "Space Mono", monospace;
+  --font-sans: "Inter", sans-serif;
+  
+  --color-beige-50: #faf9f6;
+  --color-beige-100: #f5f2eb;
+  --color-beige-200: #eae4d3;
+  --color-beige-300: #dcd0b8;
+  --color-beige-400: #ccb997;
+  --color-beige-500: #c0a57e;
+  --color-beige-600: #b39369;
+  --color-beige-700: #957855;
+  --color-beige-800: #7b6247;
+  --color-beige-900: #64513c;
+  --color-beige-950: #352a1e;
+}
+
+@layer base {
+  body {
+    @apply bg-beige-100 text-zinc-950 antialiased selection:bg-zinc-950 selection:text-beige-50;
+  }
+}

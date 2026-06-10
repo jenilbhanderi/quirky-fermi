@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
-export default function HardwareSpecs({ isDark }) {
+export default function HardwareSpecs() {
   return (
     <motion.article 
       initial={{ opacity: 0, y: 20 }}
@@ -11,44 +11,52 @@ export default function HardwareSpecs({ isDark }) {
       transition={{ duration: 0.6 }}
       className="max-w-4xl mx-auto px-6 py-24"
     >
-      <Link to="/" className={`inline-flex items-center gap-2 text-sm mb-12 transition-colors hover:underline ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>
+      <Link to="/" className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest mb-12 transition-colors text-zinc-500 hover:text-zinc-950">
         <ArrowLeft className="w-4 h-4" /> Back to Hylunian
       </Link>
       
       <header className="mb-16">
-        <h1 className={`text-4xl md:text-5xl font-semibold tracking-tight leading-tight mb-6 ${isDark ? 'text-white' : 'text-black'}`}>
+        <div className="font-mono text-[11px] uppercase tracking-widest mb-6 text-zinc-500">
+          [ Documentation ]
+        </div>
+        <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-none mb-6 text-zinc-950">
           Hardware Specifications
         </h1>
-        <p className={`text-lg font-light ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+        <p className="text-lg font-light text-zinc-600">
           The architectural details behind our next-generation optical technology.
         </p>
       </header>
 
-      <div className={`space-y-12 transition-colors duration-500 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+      <div className="space-y-8 text-zinc-600">
         
         {/* Spec Block 1 */}
-        <div className={`p-8 rounded-3xl border ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/10'}`}>
-          <h2 className={`text-2xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-black'}`}>Subpixel Array Architecture</h2>
-          <p className="mb-4 font-light leading-relaxed">
+        <div className="p-10 border transition-colors border-zinc-950/20 bg-beige-100/50 hover:bg-beige-100/80">
+          <h2 className="font-serif text-3xl mb-4 text-zinc-950">Subpixel Array Architecture</h2>
+          <p className="mb-6 font-light leading-relaxed">
             Our proprietary subpixel structure abandons the traditional RGB pentile matrix. Instead, we utilize an interleaved quantum-dot grid that reduces chromatic aberration by 40% and achieves perfect subpixel rendering at the hardware level.
+            <div className="mt-4">
+              <a href="/research/chromatic-aberration-reduction" className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-widest text-beige-600 hover:text-beige-500 hover:underline">
+                [ Read Testing Methodology ]
+              </a>
+            </div>
           </p>
-          <ul className="list-disc list-inside space-y-2 font-mono text-sm opacity-80">
-            <li>Targeting ultra-high pixel density</li>
-            <li>Hexagonal interleaved geometry</li>
-            <li>Optimized for maximum HDR brightness</li>
+          <ul className="space-y-3 font-mono text-[11px] uppercase tracking-widest text-zinc-500">
+            <li className="flex gap-3"><span className="text-zinc-950">[+]</span> Targeting ultra-high pixel density</li>
+            <li className="flex gap-3"><span className="text-zinc-950">[+]</span> Hexagonal interleaved geometry</li>
+            <li className="flex gap-3"><span className="text-zinc-950">[+]</span> Optimized for maximum HDR brightness</li>
           </ul>
         </div>
 
         {/* Spec Block 2 */}
-        <div className={`p-8 rounded-3xl border ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/10'}`}>
-          <h2 className={`text-2xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-black'}`}>Optical Clarity & HMI Integration</h2>
-          <p className="mb-4 font-light leading-relaxed">
+        <div className="p-10 border transition-colors border-zinc-950/20 bg-beige-100/50 hover:bg-beige-100/80">
+          <h2 className="font-serif text-3xl mb-4 text-zinc-950">Optical Clarity & HMI Integration</h2>
+          <p className="mb-6 font-light leading-relaxed">
             By fusing the touch interface layer directly into the photon-emission substrate, our goal is to eliminate the air gap entirely. This approach is designed to achieve zero parallax error, providing a true 1:1 human-machine interaction surface.
           </p>
-          <ul className="list-disc list-inside space-y-2 font-mono text-sm opacity-80">
-            <li>Focusing on minimal reflectivity</li>
-            <li>High-frequency touch polling architecture</li>
-            <li>Maximum glass durability standards</li>
+          <ul className="space-y-3 font-mono text-[11px] uppercase tracking-widest text-zinc-500">
+            <li className="flex gap-3"><span className="text-zinc-950">[+]</span> Focusing on minimal reflectivity</li>
+            <li className="flex gap-3"><span className="text-zinc-950">[+]</span> High-frequency touch polling architecture</li>
+            <li className="flex gap-3"><span className="text-zinc-950">[+]</span> Maximum glass durability standards</li>
           </ul>
         </div>
 

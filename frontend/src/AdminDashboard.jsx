@@ -5,7 +5,7 @@ const API_BASE = import.meta.env.VITE_API_URL || (
   window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api'
 );
 
-export default function AdminDashboard({ isDark }) {
+export default function AdminDashboard() {
   const [token, setToken] = useState(localStorage.getItem('hylunian_admin_token') || '');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -72,24 +72,27 @@ export default function AdminDashboard({ isDark }) {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`w-full max-w-md p-8 rounded-3xl border backdrop-blur-xl ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/10'}`}
+          className="w-full max-w-md p-10 border bg-beige-100/50 border-zinc-950/20"
         >
-          <h2 className={`text-2xl font-semibold mb-6 ${isDark ? 'text-white' : 'text-black'}`}>Command Center Access</h2>
+          <div className="font-mono text-[11px] uppercase tracking-widest mb-4 text-zinc-500">
+            [ Security Protocol ]
+          </div>
+          <h2 className="font-serif text-3xl mb-8 text-zinc-950">Command Center Access</h2>
           <form onSubmit={handleLogin} className="space-y-4">
             <input 
               type="text" 
               placeholder="Username" 
               value={username} onChange={e => setUsername(e.target.value)} required
-              className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-colors ${isDark ? 'bg-black/50 border-white/10 text-white focus:border-white/30' : 'bg-zinc-50 border-black/10 text-black focus:border-black/30'}`}
+              className="w-full px-4 py-3 border focus:outline-none transition-colors bg-beige-50 border-zinc-950/20 text-zinc-950 focus:border-zinc-950"
             />
             <input 
               type="password" 
               placeholder="Password" 
               value={password} onChange={e => setPassword(e.target.value)} required
-              className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-colors ${isDark ? 'bg-black/50 border-white/10 text-white focus:border-white/30' : 'bg-zinc-50 border-black/10 text-black focus:border-black/30'}`}
+              className="w-full px-4 py-3 border focus:outline-none transition-colors bg-beige-50 border-zinc-950/20 text-zinc-950 focus:border-zinc-950"
             />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button type="submit" className={`w-full py-3 rounded-xl font-semibold transition-colors ${isDark ? 'bg-white text-black hover:bg-zinc-200' : 'bg-black text-white hover:bg-zinc-800'}`}>
+            {error && <p className="text-red-600 text-sm font-mono mt-2">{error}</p>}
+            <button type="submit" className="w-full py-3 mt-4 font-mono text-sm uppercase tracking-widest transition-colors bg-zinc-950 text-beige-50 hover:bg-zinc-800">
               Authenticate
             </button>
           </form>
@@ -99,59 +102,64 @@ export default function AdminDashboard({ isDark }) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <div className="flex items-center justify-between mb-12">
-        <h1 className={`text-4xl font-semibold ${isDark ? 'text-white' : 'text-black'}`}>Command Center</h1>
-        <button onClick={handleLogout} className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'}`}>
+    <div className="max-w-6xl mx-auto px-6 py-24">
+      <div className="flex items-center justify-between mb-16 pb-8 border-b border-zinc-950/10">
+        <div>
+          <div className="font-mono text-[11px] uppercase tracking-widest mb-4 text-zinc-500">
+            [ Authorized ]
+          </div>
+          <h1 className="font-serif text-4xl text-zinc-950">Command Center</h1>
+        </div>
+        <button onClick={handleLogout} className="px-4 py-2 text-[11px] font-mono uppercase tracking-widest border transition-colors bg-beige-100/50 border-zinc-950/20 text-zinc-600 hover:bg-zinc-950 hover:text-beige-50">
           Disconnect
         </button>
       </div>
 
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className={`p-6 rounded-3xl border ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/10'}`}>
-            <p className={`text-sm mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Total Waitlist</p>
-            <p className={`text-4xl font-bold ${isDark ? 'text-white' : 'text-black'}`}>{stats.total}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          <div className="p-8 border bg-beige-100/50 border-zinc-950/20">
+            <p className="font-mono text-[11px] uppercase tracking-widest mb-4 text-zinc-500">Total Waitlist</p>
+            <p className="font-serif text-5xl text-zinc-950">{stats.total}</p>
           </div>
-          <div className={`p-6 rounded-3xl border ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/10'}`}>
-            <p className={`text-sm mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Joined Today</p>
-            <p className={`text-4xl font-bold ${isDark ? 'text-white' : 'text-black'}`}>{stats.today}</p>
+          <div className="p-8 border bg-beige-100/50 border-zinc-950/20">
+            <p className="font-mono text-[11px] uppercase tracking-widest mb-4 text-zinc-500">Joined Today</p>
+            <p className="font-serif text-5xl text-zinc-950">{stats.today}</p>
           </div>
-          <div className={`p-6 rounded-3xl border ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/10'}`}>
-            <p className={`text-sm mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>7-Day Growth Average</p>
-            <p className={`text-4xl font-bold ${isDark ? 'text-white' : 'text-black'}`}>{stats.growth?.dailyAverage || 0} / day</p>
+          <div className="p-8 border bg-beige-100/50 border-zinc-950/20">
+            <p className="font-mono text-[11px] uppercase tracking-widest mb-4 text-zinc-500">7-Day Growth Average</p>
+            <p className="font-serif text-5xl text-zinc-950">{stats.growth?.dailyAverage || 0} <span className="text-xl font-mono text-zinc-400">/ day</span></p>
           </div>
         </div>
       )}
 
-      <div className={`rounded-3xl border overflow-hidden ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/10'}`}>
-        <div className={`p-6 border-b flex justify-between items-center ${isDark ? 'border-white/10' : 'border-black/10'}`}>
-          <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-black'}`}>Waitlist Directory</h2>
-          <a href={`${API_BASE}/admin/waitlist/export`} target="_blank" rel="noreferrer" className={`px-4 py-2 text-sm font-medium rounded-full ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>
+      <div className="border bg-beige-100/50 border-zinc-950/20">
+        <div className="p-6 border-b border-zinc-950/10 flex justify-between items-center">
+          <h2 className="font-serif text-2xl text-zinc-950">Waitlist Directory</h2>
+          <a href={`${API_BASE}/admin/waitlist/export`} target="_blank" rel="noreferrer" className="px-4 py-2 text-[11px] font-mono uppercase tracking-widest bg-zinc-950 text-beige-50 hover:bg-zinc-800">
             Export CSV
           </a>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className={`text-sm font-medium ${isDark ? 'text-zinc-400 border-white/10' : 'text-zinc-500 border-black/10'} border-b`}>
+              <tr className="font-mono text-[11px] uppercase tracking-widest text-zinc-500 border-b border-zinc-950/10">
                 <th className="px-6 py-4">ID</th>
                 <th className="px-6 py-4">Email</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Joined</th>
               </tr>
             </thead>
-            <tbody className={`text-sm ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+            <tbody className="text-sm text-zinc-600 font-mono">
               {waitlist.map((entry) => (
-                <tr key={entry.id} className={`border-b last:border-0 ${isDark ? 'border-white/5' : 'border-black/5'}`}>
-                  <td className="px-6 py-4">{entry.id}</td>
-                  <td className="px-6 py-4 font-medium">{entry.email}</td>
+                <tr key={entry.id} className="border-b border-zinc-950/5 last:border-0 hover:bg-beige-100">
+                  <td className="px-6 py-4 opacity-50">{entry.id}</td>
+                  <td className="px-6 py-4 text-zinc-950">{entry.email}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-full text-xs ${entry.status === 'pending' ? 'bg-yellow-500/20 text-yellow-500' : 'bg-green-500/20 text-green-500'}`}>
+                    <span className={`px-2 py-1 text-[11px] uppercase tracking-widest ${entry.status === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'}`}>
                       {entry.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4">{new Date(entry.created_at + 'Z').toLocaleString()}</td>
+                  <td className="px-6 py-4 opacity-50">{new Date(entry.created_at + 'Z').toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
