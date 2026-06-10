@@ -81,6 +81,7 @@ export default function App() {
                 ) : (
                   <>
                     <HeroSection isDark={isDark} settings={settings} />
+                    <AboutSection isDark={isDark} />
                     {papers.length > 0 && <ResearchSection isDark={isDark} papers={papers} />}
                   </>
                 )
@@ -92,8 +93,6 @@ export default function App() {
             </Routes>
           </main>
           <Footer isDark={isDark} />
-          
-          <SocialProofToast isDark={isDark} />
         </div>
       </div>
     </Router>
@@ -118,10 +117,16 @@ function Navbar({ theme, setTheme, isDark }) {
         </Link>
         
         <div className="flex items-center gap-4">
-          <div className={`hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full border transition-colors ${isDark ? 'bg-black/60 border-white/5' : 'bg-black/5 border-black/5'}`}>
-            <div className="w-2 h-2 rounded-full shadow-[0_0_10px_#00FF66]" style={{ backgroundColor: '#00FF66' }}></div>
-            <span className={`text-xs font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>R&D Lab Phase</span>
+          <div className="hidden md:flex items-center gap-6 mr-4 text-sm font-medium">
+            <a href="#about" className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>About</a>
+            <a href="#research" className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>Research</a>
+            <Link to="/specs" className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>Specs</Link>
+            <a href="mailto:contact@hylunian.com" className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>Contact</a>
           </div>
+          <a href="#about" className={`hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full border transition-colors ${isDark ? 'bg-black/60 border-white/5 hover:bg-white/5' : 'bg-black/5 border-black/5 hover:bg-black/10'}`}>
+            <div className="w-2 h-2 rounded-full shadow-[0_0_10px_#00FF66]" style={{ backgroundColor: '#00FF66' }}></div>
+            <span className={`text-xs font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>R&D Lab Phase</span>
+          </a>
 
           {/* Theme Toggle Button */}
           <button 
@@ -237,7 +242,7 @@ function HeroSection({ isDark, settings }) {
           </h1>
 
           {/* Body */}
-          <p className={`max-w-2xl mx-auto text-lg md:text-xl font-light leading-relaxed transition-colors ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+          <p className={`max-w-2xl mx-auto text-lg md:text-xl font-light leading-relaxed transition-colors ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
             {heroSubtitle}
           </p>
 
@@ -255,20 +260,23 @@ function HeroSection({ isDark, settings }) {
             ) : (
               <>
                 <form onSubmit={handleSubmit} className={`flex flex-col sm:flex-row items-center w-full max-w-lg p-1.5 rounded-full border backdrop-blur-xl transition-all shadow-2xl ${isDark ? 'bg-white/5 border-white/10 focus-within:bg-white/10 focus-within:border-white/20' : 'bg-white border-black/10 focus-within:bg-zinc-50 focus-within:border-black/20'}`}>
+                  <label htmlFor="waitlist-email" className="sr-only">Email Address</label>
                   <input
+                    id="waitlist-email"
                     type="email"
                     required
                     placeholder="Enter your email address"
                     value={email}
                     onChange={(e) => { setEmail(e.target.value); setError(''); }}
-                    className={`w-full px-6 py-4 bg-transparent focus:outline-none transition-colors ${isDark ? 'text-white placeholder-zinc-500' : 'text-black placeholder-zinc-400'}`}
+                    className={`w-full px-6 py-4 bg-transparent focus:outline-none focus:ring-2 focus:ring-inset focus:ring-zinc-400 focus:border-transparent rounded-l-full transition-colors ${isDark ? 'text-white placeholder-zinc-400' : 'text-black placeholder-zinc-500'}`}
                   />
                   <motion.button
                     type="submit"
                     disabled={isLoading}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`w-full sm:w-auto px-8 py-4 rounded-full font-semibold transition-colors flex items-center justify-center gap-2 group whitespace-nowrap disabled:opacity-50 relative ${isDark ? 'bg-white text-black hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]' : 'bg-black text-white hover:shadow-[0_10px_30px_rgba(0,0,0,0.15)]'}`}
+                    onClick={() => { if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([15]); }}
+                    className={`w-full sm:w-auto px-8 py-4 rounded-full font-semibold transition-colors flex items-center justify-center gap-2 group whitespace-nowrap disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 ${isDark ? 'bg-white text-black hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] focus:ring-offset-[#050505]' : 'bg-black text-white hover:shadow-[0_10px_30px_rgba(0,0,0,0.15)] focus:ring-offset-white'}`}
                   >
                     {isLoading ? 'Submitting...' : ctaText}
                     {!isLoading && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
@@ -278,9 +286,9 @@ function HeroSection({ isDark, settings }) {
                   <motion.div 
                     initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }} 
-                    className={`mt-5 text-sm font-light ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}
+                    className={`mt-5 text-sm font-light ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}
                   >
-                    Join <span className={`font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-600'}`}>{waitlistCount}+</span> researchers on the waitlist.
+                    Join <span className={`font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>{waitlistCount}+</span> researchers on the waitlist.
                   </motion.div>
                 )}
                 {error && (
@@ -292,6 +300,14 @@ function HeroSection({ isDark, settings }) {
                     {error}
                   </motion.p>
                 )}
+                
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className={`mt-6 text-xs font-light max-w-sm text-center mx-auto ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}
+                >
+                  Your email is secure and strictly used for R&D updates and beta access. <Link to="/legal" className="underline hover:text-zinc-400">Privacy Policy</Link>
+                </motion.p>
               </>
             )}
           </div>
@@ -301,9 +317,48 @@ function HeroSection({ isDark, settings }) {
   );
 }
 
+function AboutSection({ isDark }) {
+  return (
+    <section id="about" className="px-6 py-24 relative border-t transition-colors duration-500 scroll-mt-24" style={{ borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}>
+      <div className="max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+          <div>
+            <h2 className={`text-3xl md:text-4xl font-semibold tracking-tight mb-6 ${isDark ? 'text-white' : 'text-black'}`}>
+              Engineering the <br/>Emissive Core
+            </h2>
+            <p className={`text-lg font-light leading-relaxed mb-6 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+              Hylunian is an R&D laboratory developing transparent piezoelectric and triboelectric (TENG) display interfaces. Our technology converts the mechanical energy of your physical touch into self-sustaining electrical power.
+            </p>
+            <p className={`text-lg font-light leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+              We are currently in the prototyping and empirical testing phase. Early access to our hardware is highly limited.
+            </p>
+          </div>
+          <div className={`p-8 rounded-3xl border backdrop-blur-md ${isDark ? 'bg-zinc-900/40 border-white/10' : 'bg-white border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]'}`}>
+            <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-black'}`}>Who is this for?</h3>
+            <ul className={`space-y-4 font-light ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#FF003C' }}></div>
+                <span><strong className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>Optical Researchers:</strong> Receive our proprietary technical whitepapers and empirical data.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#00FF66' }}></div>
+                <span><strong className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>Hardware Partners:</strong> Evaluate our elastomer composites for future integration.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0033FF' }}></div>
+                <span><strong className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>Deep-Tech Investors:</strong> Get priority access to technical briefings and beta prototypes.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ResearchSection({ isDark, papers }) {
   return (
-    <section className="px-6 py-32 relative">
+    <section id="research" className="px-6 py-32 relative scroll-mt-24">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col items-center text-center mb-16 space-y-4">
           <motion.div 
@@ -328,7 +383,7 @@ function ResearchSection({ isDark, papers }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className={`text-lg max-w-2xl font-light transition-colors ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}
+            className={`text-lg max-w-2xl font-light transition-colors ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}
           >
             Review our foundational hardware documentation outlining the architectural leaps in Hylunian's emissive technology.
           </motion.p>
@@ -373,7 +428,7 @@ function ResearchCard({ paper, isDark }) {
           {paper.title}
         </h3>
         
-        <p className={`text-sm font-light leading-relaxed mb-8 transition-colors line-clamp-4 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+        <p className={`text-sm font-light leading-relaxed mb-8 transition-colors line-clamp-4 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
           {paper.abstract}
         </p>
       </div>
@@ -491,12 +546,12 @@ function Footer({ isDark }) {
         </div>
         
         <div className="flex gap-8 text-sm font-light">
-          <a href="mailto:contact@hylunian.com" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Lab Contact</a>
-          <Link to="/legal" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Privacy & Legal</Link>
-          <Link to="/specs" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>Hardware Specs</Link>
+          <a href="mailto:contact@hylunian.com" className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>Lab Contact</a>
+          <Link to="/legal" className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>Privacy & Legal</Link>
+          <Link to="/specs" className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>Hardware Specs</Link>
         </div>
         
-        <div className={`text-sm transition-colors ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>
+        <div className={`text-sm transition-colors ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}>
           &copy; {new Date().getFullYear()} Hylunian.
         </div>
       </div>
@@ -504,68 +559,3 @@ function Footer({ isDark }) {
   );
 }
 
-const SOCIAL_PROOF_PROFILES = [
-  "Hardware Engineer from Berlin",
-  "Materials Scientist from Tokyo",
-  "Venture Capitalist from SF",
-  "Display Architect from Seoul",
-  "Optical Researcher from MIT",
-  "Nanotechnology Lead from Taipei"
-];
-
-function SocialProofToast({ isDark }) {
-  const [profile, setProfile] = useState(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const cycleToast = () => {
-      const nextProfile = SOCIAL_PROOF_PROFILES[Math.floor(Math.random() * SOCIAL_PROOF_PROFILES.length)];
-      setProfile(nextProfile);
-      setVisible(true);
-      
-      setTimeout(() => {
-        setVisible(false);
-      }, 4000);
-    };
-
-    const initialTimer = setTimeout(cycleToast, 3000);
-    const interval = setInterval(() => {
-      cycleToast();
-    }, Math.floor(Math.random() * 13000) + 12000);
-
-    return () => {
-      clearTimeout(initialTimer);
-      clearInterval(interval);
-    };
-  }, []);
-
-  return (
-    <div className="fixed bottom-6 left-6 z-50 pointer-events-none">
-      <AnimatePresence>
-        {visible && profile && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className={`flex items-center gap-3 px-5 py-3 rounded-2xl shadow-2xl backdrop-blur-md border ${
-              isDark 
-                ? 'bg-black/60 border-white/10 text-white' 
-                : 'bg-white/80 border-black/10 text-black'
-            }`}
-          >
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white">
-              <span className="text-xs font-bold">{profile.charAt(0)}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold leading-tight">{profile}</span>
-              <span className={`text-[10px] ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                Just requested early access
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
