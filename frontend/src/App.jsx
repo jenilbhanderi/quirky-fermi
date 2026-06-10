@@ -353,7 +353,7 @@ function ResearchSection({ isDark, papers }) {
 }
 
 function ResearchCard({ paper, isDark }) {
-  const dateStr = new Date(paper.created_at + 'Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const dateStr = new Date(paper.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   const gradientClass = paper.color && paper.color.includes('from-') ? paper.color : 'from-blue-500 to-purple-500';
 
   return (
@@ -434,7 +434,7 @@ function ResearchArticle({ isDark }) {
     );
   }
 
-  const dateStr = new Date(paper.created_at + 'Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const dateStr = new Date(paper.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
     <motion.article 
