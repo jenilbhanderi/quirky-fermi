@@ -112,6 +112,28 @@ app.get('/api/admin/seed-papers', async (req, res) => {
   }
 });
 
+app.get('/api/admin/publish-daily', async (req, res) => {
+  try {
+    const { pool } = require('./db/database');
+    const paper = {
+      slug: 'kinetic-conversion-efficiency',
+      title: 'Kinetic Conversion Efficiency in Elastomeric TENG Displays',
+      abstract: 'An empirical analysis of energy conversion efficiency ratios across highly flexible polyurethane-urea elastomers embedded with PVDF nanoparticles for next-generation touch interfaces.',
+      content: '## Abstract\nRecent breakthroughs in piezoelectric transparent electrodes have pushed optical transmittance above 85%. However, mechanical strain often reduces kinetic conversion efficiency. We present an empirical study of PVDF-embedded elastomeric substrates capable of maintaining a 4.2% energy conversion efficiency even under 200% mechanical strain.\n\n## Empirical Data\nTesting across 10,000 standard touch-press cycles (approx. 2.5 N of force), the composite matrix consistently output 1.4mW/cm2, demonstrating negligible degradation in electrical output.\n\n## Implications\nThis consistent energy harvesting threshold is sufficient to power low-energy emissive subpixels dynamically, closing the loop on fully self-powered transparent interfaces.',
+      authors: 'Dr. E. Vance',
+      category: 'Kinetic Physics',
+      color: 'from-violet-500 to-fuchsia-500'
+    };
+    await pool.query(
+      'INSERT INTO research_papers (slug, title, abstract, content, authors, category, color) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [paper.slug, paper.title, paper.abstract, paper.content, paper.authors, paper.category, paper.color]
+    );
+    res.json({ status: 'success', message: 'Daily paper published.' });
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
 app.use('/api/waitlist', require('./routes/waitlist'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/admin', require('./routes/admin'));
