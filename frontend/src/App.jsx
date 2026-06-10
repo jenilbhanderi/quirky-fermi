@@ -369,24 +369,7 @@ function HeroSection({ isDark, settings }) {
                   </motion.button>
                 </form>
 
-                {/* Scarcity / Progress Bar */}
-                <div className="w-full max-w-lg mt-6 px-4">
-                  <div className="flex justify-between items-end mb-2">
-                    <span className={`font-mono text-[10px] uppercase tracking-widest ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Phase 1 Dev-Kits</span>
-                    <span className={`font-mono text-xs font-semibold ${isDark ? 'text-beige-50' : 'text-zinc-900'}`}>42 / 50 Claimed</span>
-                  </div>
-                  <div className="w-full h-1 bg-zinc-950/10 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: '84%' }}
-                      transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-                      className={`h-full ${isDark ? 'bg-beige-500 shadow-[0_0_8px_#c0a57e]' : 'bg-zinc-950'}`}
-                    />
-                  </div>
-                  <div className="mt-2 text-right">
-                    <span className="inline-block text-[10px] font-mono uppercase tracking-widest text-red-500 animate-pulse font-semibold">Only 8 remaining</span>
-                  </div>
-                </div>
+                {/* Scarcity / Progress Bar Removed as requested */}
                 {waitlistCount !== null && !error && !isSubmitted && (
                   <motion.div 
                     initial={{ opacity: 0 }} 
