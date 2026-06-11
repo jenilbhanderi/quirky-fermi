@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { ArrowRight, Layers, ChevronRight, Sun, Moon, ArrowLeft, Plus, Menu, X } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import Legal from './Legal';
-import AdminDashboard from './AdminDashboard';
-import HardwareSpecs from './HardwareSpecs';
 import TypewriterText from './components/TypewriterText';
+
+const Legal = lazy(() => import('./Legal'));
+const AdminDashboard = lazy(() => import('./AdminDashboard'));
+const HardwareSpecs = lazy(() => import('./HardwareSpecs'));
+const ResearchArticle = lazy(() => import('./ResearchArticle'));
 
 const API_BASE = import.meta.env.VITE_API_URL || (
   window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api'
@@ -135,33 +136,35 @@ export default function App() {
         <div className="relative z-10 flex flex-col min-h-screen">
           <Navbar isDark={isDark} />
           <main className="flex-grow pt-32">
-            <Routes>
-              <Route path="/" element={
-                loading ? (
-                  <div className="min-h-[80vh] flex items-center justify-center opacity-50 font-mono text-sm tracking-widest uppercase">Initializing...</div>
-                ) : (
-                  <>
-                    <HeroSection isDark={isDark} settings={settings} />
-                    <AboutSection isDark={isDark} />
-                    <TeamSection isDark={isDark} />
-                  </>
-                )
-              } />
-              <Route path="/research" element={
-                loading ? (
-                  <div className="min-h-[80vh] flex items-center justify-center opacity-50 font-mono text-sm tracking-widest uppercase">Initializing...</div>
-                ) : (
-                  <div className="min-h-[85vh]">
-                    <ResearchSection isDark={isDark} papers={papers} />
-                  </div>
-                )
-              } />
-              <Route path="/research/:slug" element={<ResearchArticle />} />
-              <Route path="/legal" element={<Legal />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/specs" element={<HardwareSpecs />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+              <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center opacity-50 font-mono text-sm tracking-widest uppercase">Loading Modules...</div>}>
+                <Routes>
+                  <Route path="/" element={
+                    loading ? (
+                      <div className="min-h-[80vh] flex items-center justify-center opacity-50 font-mono text-sm tracking-widest uppercase">Initializing...</div>
+                    ) : (
+                      <>
+                        <HeroSection isDark={isDark} settings={settings} />
+                        <AboutSection isDark={isDark} />
+                        <TeamSection isDark={isDark} />
+                      </>
+                    )
+                  } />
+                  <Route path="/research" element={
+                    loading ? (
+                      <div className="min-h-[80vh] flex items-center justify-center opacity-50 font-mono text-sm tracking-widest uppercase">Initializing...</div>
+                    ) : (
+                      <div className="min-h-[85vh]">
+                        <ResearchSection isDark={isDark} papers={papers} />
+                      </div>
+                    )
+                  } />
+                  <Route path="/research/:slug" element={<ResearchArticle />} />
+                  <Route path="/legal" element={<Legal />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/specs" element={<HardwareSpecs />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
           </main>
           <Footer />
         </div>
@@ -618,108 +621,7 @@ function ResearchCard({ paper, isDark }) {
   );
 }
 
-function ResearchArticle() {
-  const { slug } = useParams();
-  const [paper, setPaper] = useState(null);
-  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    fetch(`${API_BASE}/papers/${slug}`)
-      .then(r => r.ok ? r.json() : Promise.reject('Not found'))
-      .then(data => {
-        setPaper(data);
-        document.title = `${data.title} - Hylunian Research`;
-      })
-      .catch(() => {
-        // Fallback to static papers if backend is down
-        const fallbackPaper = FALLBACK_PAPERS.find(p => p.slug === slug);
-        if (fallbackPaper) {
-          setPaper(fallbackPaper);
-          document.title = `${fallbackPaper.title} - Hylunian Research`;
-        } else {
-          setError(true);
-        }
-      });
-      
-    return () => {
-      document.title = 'Hylunian - Display Technology Research';
-    };
-  }, [slug]);
-
-  if (error) {
-    return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center">
-        <h1 className="font-serif text-3xl mb-4 text-zinc-950">Paper Not Found</h1>
-        <Link to="/" className="font-mono text-xs uppercase tracking-widest text-zinc-500 hover:text-zinc-950">← Back to Home</Link>
-      </div>
-    );
-  }
-
-  if (!paper) {
-    return (
-      <div className="min-h-[70vh] flex items-center justify-center">
-        <div className="opacity-50 font-mono text-sm uppercase tracking-widest">Loading...</div>
-      </div>
-    );
-  }
-
-  const dateStr = new Date(paper.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-  return (
-    <motion.article 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="max-w-3xl mx-auto px-6 py-24"
-    >
-      <Link to="/" className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest mb-12 transition-colors text-zinc-500 hover:text-zinc-950">
-        <ArrowLeft className="w-4 h-4" /> Back to Hylunian
-      </Link>
-      
-      <header className="mb-16">
-        <div className="inline-flex items-center gap-2 px-3 py-1 border text-[11px] font-mono uppercase tracking-widest mb-6 transition-colors bg-beige-100 border-zinc-950/10 text-zinc-600">
-          {paper.category || 'Research'}
-        </div>
-        <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl tracking-tight leading-none mb-6 text-zinc-950">
-          {paper.title}
-        </h1>
-        <div className="text-xs font-mono uppercase tracking-widest flex flex-wrap gap-4 items-center text-zinc-500">
-          {paper.authors && <span>By {paper.authors}</span>}
-          <span>Published on {dateStr}</span>
-        </div>
-      </header>
-
-      {/* Abstract */}
-      <div className="p-8 mb-16 border bg-beige-100/50 border-zinc-950/20">
-        <div className="font-mono text-[11px] uppercase tracking-widest mb-4 text-zinc-500">Abstract</div>
-        <p className="text-lg font-light leading-relaxed text-zinc-600">
-          {paper.summary}
-        </p>
-      </div>
-
-      {/* Content */}
-      <div className="prose prose-lg max-w-none prose-zinc prose-p:text-zinc-600 prose-headings:text-zinc-900 prose-headings:font-serif">
-        {paper.content ? (
-          <ReactMarkdown>{paper.content}</ReactMarkdown>
-        ) : (
-          <p className="italic">This paper does not have full text available.</p>
-        )}
-      </div>
-
-      {/* Footer */}
-      <div className="mt-24 p-12 border text-center transition-colors bg-beige-100/50 border-zinc-950/20">
-        <div className="w-12 h-12 mx-auto border border-zinc-950/20 bg-beige-100 flex items-center justify-center rounded-full mb-6">
-          <div className="w-2 h-2 rounded-full bg-zinc-950"></div>
-        </div>
-        <h3 className="font-serif text-2xl mb-4 text-zinc-950">Stay Updated on Our Research</h3>
-        <p className="mb-8 font-light text-zinc-600">Join the waitlist to receive future papers directly in your inbox.</p>
-        <Link to="/" className="inline-block px-8 py-4 font-mono text-xs uppercase tracking-widest transition-colors bg-zinc-950 text-beige-50 hover:bg-zinc-800">
-          Return Home
-        </Link>
-      </div>
-    </motion.article>
-  );
-}
 
 function Footer({ isDark }) {
   return (
