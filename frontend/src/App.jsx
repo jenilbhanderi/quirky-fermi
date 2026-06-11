@@ -428,7 +428,7 @@ function HeroSection({ isDark, settings }) {
 
 function AboutSection({ isDark }) {
   return (
-    <section id="about" className={`px-6 py-32 relative border-t transition-colors duration-500 scroll-mt-24 ${isDark ? 'border-beige-50/10' : 'border-zinc-950/10'}`}>
+    <section id="about" className={`px-6 py-16 md:py-32 relative border-t transition-colors duration-500 scroll-mt-24 ${isDark ? 'border-beige-50/10' : 'border-zinc-950/10'}`}>
       <div className="max-w-5xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-start">
           <motion.div
@@ -481,7 +481,7 @@ function AboutSection({ isDark }) {
 
 function TeamSection({ isDark }) {
   return (
-    <section id="team" className={`px-6 py-24 relative border-t transition-colors duration-500 scroll-mt-24 ${isDark ? 'border-beige-50/10' : 'border-zinc-950/10'}`}>
+    <section id="team" className={`px-6 py-16 md:py-24 relative border-t transition-colors duration-500 scroll-mt-24 ${isDark ? 'border-beige-50/10' : 'border-zinc-950/10'}`}>
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row gap-16 items-start">
            
@@ -535,7 +535,7 @@ function TeamSection({ isDark }) {
 
 function ResearchSection({ isDark, papers }) {
   return (
-    <section id="research" className="px-6 py-32 relative scroll-mt-24">
+    <section id="research" className="px-6 py-16 md:py-32 relative scroll-mt-24">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col items-center text-center mb-24 space-y-4">
           <motion.div 

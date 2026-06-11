@@ -35,25 +35,29 @@ const TypewriterText = ({ text, className = "", delay = 0, element: Wrapper = "p
   };
 
   return (
-    <Wrapper className={`${className} overflow-hidden flex flex-wrap`}>
+    <Wrapper className={`${className} flex flex-col`}>
       <motion.div
         variants={container}
         initial="hidden"
         animate="visible"
-        className="flex flex-wrap"
+        className="flex flex-col gap-2"
       >
-        {words.map((word, wordIndex) => (
-          <span key={wordIndex} className="inline-block mr-2 whitespace-nowrap">
-            {word.split("").map((character, charIndex) => (
-              <motion.span
-                variants={child}
-                key={charIndex}
-                className="inline-block"
-              >
-                {character}
-              </motion.span>
+        {text.split('\n').map((line, lineIndex) => (
+          <div key={lineIndex} className="flex flex-wrap justify-center mx-auto">
+            {line.split(' ').map((word, wordIndex) => (
+              <span key={wordIndex} className="inline-block mr-2 md:mr-3 lg:mr-4 whitespace-nowrap">
+                {word.split('').map((character, charIndex) => (
+                  <motion.span
+                    variants={child}
+                    key={charIndex}
+                    className="inline-block"
+                  >
+                    {character}
+                  </motion.span>
+                ))}
+              </span>
             ))}
-          </span>
+          </div>
         ))}
       </motion.div>
     </Wrapper>
