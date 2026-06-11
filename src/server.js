@@ -116,13 +116,13 @@ app.get('/api/admin/publish-daily', async (req, res) => {
   try {
     const { pool } = require('./db/database');
     const paper = {
-      slug: 'kinetic-conversion-efficiency',
-      title: 'Kinetic Conversion Efficiency in Elastomeric TENG Displays',
-      abstract: 'An empirical analysis of energy conversion efficiency ratios across highly flexible polyurethane-urea elastomers embedded with PVDF nanoparticles for next-generation touch interfaces.',
-      content: '## Abstract\nRecent breakthroughs in piezoelectric transparent electrodes have pushed optical transmittance above 85%. However, mechanical strain often reduces kinetic conversion efficiency. We present an empirical study of PVDF-embedded elastomeric substrates capable of maintaining a 4.2% energy conversion efficiency even under 200% mechanical strain.\n\n## Empirical Data\nTesting across 10,000 standard touch-press cycles (approx. 2.5 N of force), the composite matrix consistently output 1.4mW/cm2, demonstrating negligible degradation in electrical output.\n\n## Implications\nThis consistent energy harvesting threshold is sufficient to power low-energy emissive subpixels dynamically, closing the loop on fully self-powered transparent interfaces.',
-      authors: 'Dr. E. Vance',
-      category: 'Kinetic Physics',
-      color: 'from-violet-500 to-fuchsia-500'
+      slug: 'piezoceramic-optical-arrays',
+      title: 'Piezoceramic Optical Arrays for Kinetic Harvest',
+      abstract: 'A breakthrough in utilizing ultra-thin piezoceramic compounds to achieve 92% optical clarity while harvesting ambient kinetic touch energy at 1.8mW/cm2.',
+      content: '## Abstract\nTraditionally, piezoceramic materials suffer from poor optical transmittance, rendering them unsuitable for display interfaces. We introduce a nano-patterned Barium Titanate (BaTiO3) array embedded in an index-matched polymer matrix that bypasses this limitation.\n\n## Methodology\nBy matching the refractive index of the BaTiO3 nano-pillars with a cyclo-olefin polymer substrate, scattering is virtually eliminated. This results in a 92% optical transmittance in the visible spectrum.\n\n## Kinetic Yield\nWhen subjected to standard human touch pressure (approx. 2N), the array generates an average of 1.8mW/cm2, which is immediately routed to local subpixel drivers.\n\n## Conclusion\nThis represents a massive leap in self-powered emissive displays, enabling fully transparent kinetic interfaces without external power dependency.',
+      authors: 'Dr. A. Sterling',
+      category: 'Materials Science',
+      color: 'from-cyan-500 to-blue-500'
     };
     await pool.query(
       'INSERT INTO research_papers (slug, title, abstract, content, authors, category, color) VALUES ($1, $2, $3, $4, $5, $6, $7)',
