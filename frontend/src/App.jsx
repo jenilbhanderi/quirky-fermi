@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { ArrowRight, Layers, ChevronRight, Sun, Moon, ArrowLeft, Plus, Menu, X } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route, Link, useParams, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence, useScroll, useSpring, useMotionValueEvent } from 'framer-motion';
+import { ArrowRight, Layers, Plus, Home, BookOpen, Cpu, Mail } from 'lucide-react';
 import TypewriterText from './components/TypewriterText';
 
 const Legal = lazy(() => import('./Legal'));
@@ -134,8 +134,9 @@ export default function App() {
         </div>
 
         <div className="relative z-10 flex flex-col min-h-screen">
+          <ScrollToHash />
           <Navbar isDark={isDark} />
-          <main className="flex-grow pt-32">
+          <main className="flex-grow pt-24 md:pt-32">
               <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center opacity-50 font-mono text-sm tracking-widest uppercase">Loading Modules...</div>}>
                 <Routes>
                   <Route path="/" element={
@@ -166,7 +167,8 @@ export default function App() {
                 </Routes>
               </Suspense>
           </main>
-          <Footer />
+          <MobileBottomNav isDark={isDark} />
+          <Footer isDark={isDark} />
         </div>
       </div>
     </Router>
@@ -175,9 +177,28 @@ export default function App() {
 
 // --- Components ---
 
-function Navbar({ theme, setTheme, isDark }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+function ScrollToHash() {
+  const location = useLocation();
 
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        const timer = setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        return () => clearTimeout(timer);
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [location]);
+
+  return null;
+}
+
+function Navbar({ isDark }) {
   return (
     <motion.nav 
       initial={{ y: -20, opacity: 0 }}
@@ -194,47 +215,102 @@ function Navbar({ theme, setTheme, isDark }) {
         
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-8 mr-4 text-xs font-mono uppercase tracking-widest">
-            <a href="/#about" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>About</a>
+            <Link to="/#about" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>About</Link>
             <Link to="/research" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>Research</Link>
             <Link to="/specs" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>Specs</Link>
             <a href="mailto:contact@hylunian.com" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>Contact</a>
           </div>
-          <a href="/#waitlist" className={`hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full border transition-colors ${isDark ? 'bg-zinc-900 border-zinc-800 hover:bg-zinc-800' : 'bg-beige-100 border-beige-200 hover:bg-beige-200'}`}>
+          <Link to="/#waitlist" className={`hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full border transition-colors ${isDark ? 'bg-zinc-900 border-zinc-800 hover:bg-zinc-800' : 'bg-beige-100 border-beige-200 hover:bg-beige-200'}`}>
             <div className={`w-2 h-2 rounded-full ${isDark ? 'bg-beige-500 shadow-[0_0_8px_#c0a57e]' : 'bg-zinc-900'}`}></div>
             <span className={`text-[11px] font-mono uppercase tracking-widest ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>R&D Phase</span>
-          </a>
-          
-          <button 
-            className="md:hidden p-2 z-50"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle Menu"
-          >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          </Link>
         </div>
-
-        {/* Mobile Menu Overlay */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className={`absolute top-16 left-0 right-0 p-6 rounded-2xl backdrop-blur-2xl border shadow-2xl flex flex-col gap-6 md:hidden ${isDark ? 'bg-zinc-950/95 border-beige-50/10' : 'bg-beige-50/95 border-zinc-950/10'}`}
-            >
-              <a href="/#about" onClick={() => setMenuOpen(false)} className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-zinc-400 hover:text-beige-50' : 'text-zinc-600 hover:text-zinc-950'}`}>About</a>
-              <Link to="/research" onClick={() => setMenuOpen(false)} className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-zinc-400 hover:text-beige-50' : 'text-zinc-600 hover:text-zinc-950'}`}>Research</Link>
-              <Link to="/specs" onClick={() => setMenuOpen(false)} className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-zinc-400 hover:text-beige-50' : 'text-zinc-600 hover:text-zinc-950'}`}>Specs</Link>
-              <a href="mailto:contact@hylunian.com" onClick={() => setMenuOpen(false)} className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-zinc-400 hover:text-beige-50' : 'text-zinc-600 hover:text-zinc-950'}`}>Contact</a>
-              <a href="/#waitlist" onClick={() => setMenuOpen(false)} className={`mt-4 w-full flex justify-center items-center gap-2 px-4 py-3 border transition-colors ${isDark ? 'bg-beige-50 text-zinc-950 hover:bg-beige-200' : 'bg-zinc-950 text-beige-50 hover:bg-zinc-800'}`}>
-                <span className="text-[11px] font-mono uppercase tracking-widest font-semibold">Request Access</span>
-              </a>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
       </div>
     </motion.nav>
+  );
+}
+
+function MobileBottomNav({ isDark }) {
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+  const location = useLocation();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
+    if (latest < 10) {
+      setHidden(false);
+      return;
+    }
+    if (latest > previous && latest > 50) {
+      setHidden(true);
+    } else if (latest < previous) {
+      setHidden(false);
+    }
+  });
+
+  const navItems = [
+    { label: 'Home', path: '/', icon: Home, isAnchor: false },
+    { label: 'About', path: '/#about', icon: Layers, isAnchor: false },
+    { label: 'Research', path: '/research', icon: BookOpen, isAnchor: false },
+    { label: 'Specs', path: '/specs', icon: Cpu, isAnchor: false },
+    { label: 'Contact', path: 'mailto:contact@hylunian.com', icon: Mail, isAnchor: true }
+  ];
+
+  const isActive = (item) => {
+    if (item.isAnchor) return false;
+    if (item.label === 'About') {
+      return location.pathname === '/' && location.hash === '#about';
+    }
+    if (item.label === 'Home') {
+      return location.pathname === '/' && location.hash !== '#about';
+    }
+    return location.pathname.startsWith(item.path);
+  };
+
+  return (
+    <motion.div
+      variants={{
+        visible: { y: 0, opacity: 1 },
+        hidden: { y: 100, opacity: 0 }
+      }}
+      animate={hidden ? "hidden" : "visible"}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="fixed bottom-6 left-0 right-0 z-50 px-6 flex justify-center md:hidden pointer-events-none"
+    >
+      <div className={`flex items-center justify-around w-full max-w-sm px-4 py-2.5 rounded-full backdrop-blur-xl border shadow-2xl pointer-events-auto transition-colors duration-500 ${isDark ? 'bg-zinc-950/80 border-beige-50/10' : 'bg-beige-50/80 border-zinc-950/10'}`}>
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const active = isActive(item);
+          const Comp = item.isAnchor ? 'a' : Link;
+          const props = item.isAnchor ? { href: item.path } : { to: item.path };
+          
+          return (
+            <Comp
+              key={item.label}
+              {...props}
+              className="flex flex-col items-center gap-1 transition-colors relative group py-1 px-3"
+            >
+              <motion.div 
+                whileTap={{ scale: 0.9 }}
+                className={`flex flex-col items-center ${active ? (isDark ? 'text-beige-50' : 'text-zinc-950') : 'text-zinc-500 hover:text-zinc-800'}`}
+              >
+                <Icon size={18} className="transition-transform group-hover:-translate-y-0.5" />
+                <span className="text-[9px] font-mono uppercase tracking-widest font-medium mt-0.5">
+                  {item.label}
+                </span>
+              </motion.div>
+              {active && (
+                <motion.div 
+                  layoutId="activeTabIndicator" 
+                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-[2px] rounded-full ${isDark ? 'bg-beige-50' : 'bg-zinc-950'}`}
+                />
+              )}
+            </Comp>
+          );
+        })}
+      </div>
+    </motion.div>
   );
 }
 
