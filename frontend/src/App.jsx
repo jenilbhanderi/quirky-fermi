@@ -272,13 +272,18 @@ function MobileBottomNav({ isDark }) {
     <motion.div
       variants={{
         visible: { y: 0, opacity: 1 },
-        hidden: { y: 100, opacity: 0 }
+        hidden: { y: 120, opacity: 0 }
       }}
       animate={hidden ? "hidden" : "visible"}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
       className="fixed bottom-6 left-0 right-0 z-50 px-6 flex justify-center md:hidden pointer-events-none"
     >
-      <div className={`flex items-center justify-around w-full max-w-sm px-4 py-2.5 rounded-full backdrop-blur-xl border shadow-2xl pointer-events-auto transition-colors duration-500 ${isDark ? 'bg-zinc-950/80 border-beige-50/10' : 'bg-beige-50/80 border-zinc-950/10'}`}>
+      <motion.div 
+        layout
+        className={`flex items-center justify-between w-full max-w-[360px] p-1.5 rounded-full backdrop-blur-xl border shadow-2xl pointer-events-auto transition-colors duration-500 ${
+          isDark ? 'bg-zinc-950/80 border-beige-50/10' : 'bg-beige-50/80 border-zinc-950/10'
+        }`}
+      >
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item);
@@ -289,27 +294,47 @@ function MobileBottomNav({ isDark }) {
             <Comp
               key={item.label}
               {...props}
-              className="flex flex-col items-center gap-1 transition-colors relative group py-1 px-3"
+              className="focus:outline-none relative flex-1 flex justify-center py-1"
             >
-              <motion.div 
-                whileTap={{ scale: 0.9 }}
-                className={`flex flex-col items-center ${active ? (isDark ? 'text-beige-50' : 'text-zinc-950') : 'text-zinc-500 hover:text-zinc-800'}`}
+              <motion.div
+                layout
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                className={`h-9 flex items-center justify-center rounded-full relative z-10 transition-colors duration-300 ${
+                  active 
+                    ? (isDark ? 'text-zinc-950' : 'text-beige-50') 
+                    : 'text-zinc-500 hover:text-zinc-800'
+                } ${active ? 'px-4' : 'w-9'}`}
               >
-                <Icon size={18} className="transition-transform group-hover:-translate-y-0.5" />
-                <span className="text-[9px] font-mono uppercase tracking-widest font-medium mt-0.5">
-                  {item.label}
-                </span>
+                {/* Bubble Background */}
+                {active && (
+                  <motion.div
+                    layoutId="activeTabBubble"
+                    className={`absolute inset-0 rounded-full -z-10 ${
+                      isDark ? 'bg-beige-50 shadow-sm' : 'bg-zinc-950 shadow-sm'
+                    }`}
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                
+                <Icon size={18} className="flex-shrink-0 relative z-10" />
+                <AnimatePresence initial={false}>
+                  {active && (
+                    <motion.span
+                      initial={{ width: 0, opacity: 0, marginLeft: 0 }}
+                      animate={{ width: "auto", opacity: 1, marginLeft: 6 }}
+                      exit={{ width: 0, opacity: 0, marginLeft: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-[10px] font-mono uppercase tracking-wider font-semibold overflow-hidden whitespace-nowrap relative z-10"
+                    >
+                      {item.label}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </motion.div>
-              {active && (
-                <motion.div 
-                  layoutId="activeTabIndicator" 
-                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-[2px] rounded-full ${isDark ? 'bg-beige-50' : 'bg-zinc-950'}`}
-                />
-              )}
             </Comp>
           );
         })}
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
