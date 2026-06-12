@@ -29,7 +29,7 @@ async function joinWaitlist(email) {
 }
 
 const FALLBACK_SETTINGS = {
-  hero_title: 'Self-Powered\nEmissive Architecture',
+  hero_title: 'Display that\ngives back.',
   hero_subtitle: 'Hylunian is pioneering transparent piezoelectric and triboelectric (TENG) display interfaces. We are engineering screens that convert your kinetic touch into self-sustaining electrical power.',
   cta_text: 'Request Early Access'
 };
@@ -425,7 +425,7 @@ function HeroSection({ isDark, settings }) {
         >
           {/* Surtile */}
           <div className={`font-mono text-xs uppercase tracking-[0.2em] ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
-            Display that gives back.
+            Self-Powered Emissive Architecture
           </div>
 
           {/* Headline - Temporal Typography */}
@@ -888,9 +888,14 @@ function Footer({ isDark }) {
   return (
     <footer className={`px-6 py-12 relative z-10 border-t transition-colors duration-500 mt-auto ${isDark ? 'bg-zinc-950 border-beige-50/10' : 'bg-beige-50 border-zinc-950/10'}`}>
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-2">
-          <img src="/favicon.svg" alt="Hylunian Logo" className={`w-6 h-6 ${isDark ? 'invert' : ''}`} />
-          <span className={`font-serif text-2xl tracking-tight leading-none pt-1 transition-colors ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>Hylunian</span>
+        <div className="flex flex-col items-center md:items-start gap-1">
+          <div className="flex items-center gap-2">
+            <img src="/favicon.svg" alt="Hylunian Logo" className={`w-6 h-6 ${isDark ? 'invert' : ''}`} />
+            <span className={`font-serif text-2xl tracking-tight leading-none pt-1 transition-colors ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>Hylunian</span>
+          </div>
+          <span className="font-mono text-[9px] uppercase tracking-widest text-zinc-500">
+            Display that gives back.
+          </span>
         </div>
         
         <div className="flex gap-8 text-[11px] font-mono uppercase tracking-widest">
