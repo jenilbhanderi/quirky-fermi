@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useSpring, useMotionValueEvent } from 'framer-motion';
-import { ArrowRight, Layers, Plus, Home, BookOpen, Cpu, Mail, ChevronRight } from 'lucide-react';
+import { ArrowRight, Layers, Plus, Home, BookOpen, Cpu, Mail, ChevronRight, Search } from 'lucide-react';
 import TypewriterText from './components/TypewriterText';
 
 const Legal = lazy(() => import('./Legal'));
@@ -37,21 +37,48 @@ const FALLBACK_SETTINGS = {
 const FALLBACK_PAPERS = [
   {
     id: 1,
-    slug: 'subpixel-energy-harvesting-rev2',
-    title: 'Subpixel Array Architecture Rev 2',
-    summary: 'A novel approach to integrating transparent triboelectric nanogenerators (TENGs) directly into the OLED subpixel matrix. During extreme empirical stress-testing, we discovered a mechanical anomaly that completely changes how kinetic touch is harvested.',
-    category: 'Hardware',
-    published_date: new Date().toISOString(),
+    slug: 'decoupling-teng-interference',
+    title: 'Decoupling Triboelectric Interference in High-Transmittance TENG Displays',
+    abstract: 'A novel architectural approach to isolating contact-electrification noise from capacitive touch signals in fully transparent, >85% transmittance triboelectric nanogenerator arrays.',
+    category: 'TENG Physics',
+    created_at: new Date().toISOString(),
     read_time: '8 min read'
   },
   {
     id: 2,
-    slug: 'chromatic-aberration-reduction',
-    title: 'Chromatic Aberration in Piezoelectric Layers',
-    summary: 'Evaluating the optical clarity and refractive index matching of PVDF-TrFE thin films. Our latest trials achieved a 40% reduction in chromatic aberration, revealing an unexpected structural advantage over traditional pentile matrices.',
-    category: 'Optical Engineering',
-    published_date: new Date(Date.now() - 86400000 * 5).toISOString(),
+    slug: 'piezoelectric-elastomeric-composites',
+    title: 'Hyper-Stretchable Piezoelectric Composites for Wearable Kinetic Interfaces',
+    abstract: 'Formulating a PVDF-based polyurethane-urea elastomer that maintains piezoelectric integrity and optical clarity even under 300% mechanical strain.',
+    category: 'Materials Science',
+    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
     read_time: '12 min read'
+  },
+  {
+    id: 3,
+    slug: 'self-powered-emissive-architecture',
+    title: 'Self-Powered Subpixel Emissive Architecture using Transparent Harvesters',
+    abstract: 'A comprehensive study on directly routing TENG-harvested energy into localized OLED subpixels to achieve localized micro-illumination without external power.',
+    category: 'Display Architecture',
+    created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+    read_time: '10 min read'
+  },
+  {
+    id: 4,
+    slug: 'refractive-matching-teng-layers',
+    title: 'Refractive Index Matching in Multi-Layer PVDF-TrFE Thin Films',
+    abstract: 'Mitigating reflection and scattering boundaries between transparent electrode composites and piezoelectric layers to achieve <1.2% total display reflectance.',
+    category: 'Optical Engineering',
+    created_at: new Date(Date.now() - 86400000 * 12).toISOString(),
+    read_time: '9 min read'
+  },
+  {
+    id: 5,
+    slug: 'elastomer-fatigue-teng-stress',
+    title: 'Triboelectric Elastomer Degradation under Empirical Mechanical Stress',
+    abstract: 'Evaluating the chemical and electrical fatigue life of transparent polydimethylsiloxane (PDMS) elastomer composites under 100,000 continuous touch stress cycles.',
+    category: 'Materials Science',
+    created_at: new Date(Date.now() - 86400000 * 20).toISOString(),
+    read_time: '14 min read'
   }
 ];
 
@@ -675,53 +702,149 @@ function LatestResearchSection({ isDark, papers }) {
 }
 
 function ResearchSection({ isDark, papers }) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredPapers = papers.filter(p => 
+    p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.abstract.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <section id="research" className="px-6 py-16 md:py-32 relative scroll-mt-24">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col items-center text-center mb-24 space-y-4">
-          <motion.div 
+    <section className="px-6 py-12 md:py-24 relative">
+      <div className="max-w-5xl mx-auto space-y-16 md:space-y-24">
+        
+        {/* 1. Two-Column Hero */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-start">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className={`font-mono text-xs uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            Phase 02 / Documentation
+            <h1 className={`font-serif text-5xl md:text-7xl tracking-tight leading-none ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>
+              Research
+            </h1>
           </motion.div>
-          <motion.h2 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className={`font-serif text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[0.95] transition-colors ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
           >
-            Optical Architecture
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className={`text-lg max-w-2xl font-light transition-colors ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}
-          >
-            Review our foundational hardware documentation outlining the architectural leaps in Hylunian's emissive technology.
-          </motion.p>
+            <p className={`text-lg md:text-xl font-light leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+              Our research laboratory investigates the physical layers, elastomer chemistry, and micro-grid subpixel architectures of self-powered emissive displays – engineering human-machine interfaces that convert touch pressure into electrical power.
+            </p>
+          </motion.div>
         </div>
 
-        <div className={`grid grid-cols-1 ${papers.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-6`}>
-          {papers.map((paper, index) => (
-            <motion.div
-              key={paper.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.15, duration: 0.6 }}
-            >
-              <Link to={`/research/${paper.slug}`}>
-                <ResearchCard paper={paper} isDark={isDark} />
-              </Link>
-            </motion.div>
-          ))}
+        {/* 2. Publications Index Table with Search Filter */}
+        <div id="publications-table" className={`pt-12 border-t ${isDark ? 'border-beige-50/10' : 'border-zinc-950/10'}`}>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+            <h2 className={`font-serif text-3xl sm:text-4xl tracking-tight leading-none ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>
+              Publications
+            </h2>
+            
+            {/* Search Input matching Anthropic design */}
+            <div className="relative w-full md:w-64">
+              <span className={`absolute left-3.5 top-1/2 -translate-y-1/2 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>
+                <Search size={14} />
+              </span>
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`w-full pl-9 pr-12 py-2 border rounded-full font-mono text-xs focus:outline-none transition-all ${
+                  isDark 
+                    ? 'bg-zinc-900 border-beige-50/10 text-beige-50 focus:border-beige-50/30' 
+                    : 'bg-white border-zinc-950/10 text-zinc-950 focus:border-zinc-950/30'
+                }`}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-mono transition-colors ${
+                    isDark ? 'text-zinc-500 hover:text-beige-300' : 'text-zinc-400 hover:text-zinc-950'
+                  }`}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Table Headers (Desktop Only) */}
+          <div className={`hidden md:grid grid-cols-[140px_180px_1fr] pb-4 border-b font-mono text-[10px] uppercase tracking-widest ${
+            isDark ? 'border-beige-50/10 text-zinc-500' : 'border-zinc-950/10 text-zinc-500'
+          }`}>
+            <span>Date</span>
+            <span>Category</span>
+            <span>Title</span>
+          </div>
+
+          {/* List Items */}
+          <div className="divide-y divide-zinc-950/10 dark:divide-beige-50/10">
+            <AnimatePresence>
+              {filteredPapers.length > 0 ? (
+                filteredPapers.map((paper) => {
+                  const formattedDate = new Date(paper.created_at).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                  });
+                  return (
+                    <motion.div
+                      key={paper.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <Link 
+                        to={`/research/${paper.slug}`} 
+                        className={`block py-5 group transition-colors duration-200 ${
+                          isDark ? 'text-beige-50' : 'text-zinc-950'
+                        }`}
+                      >
+                        {/* Desktop view */}
+                        <div className="hidden md:grid grid-cols-[140px_180px_1fr] items-baseline">
+                          <span className="font-mono text-xs text-zinc-500">
+                            {formattedDate}
+                          </span>
+                          <span className="font-mono text-xs uppercase tracking-widest text-zinc-500">
+                            {paper.category}
+                          </span>
+                          <span className={`font-serif text-lg leading-snug transition-colors ${
+                            isDark ? 'group-hover:text-beige-300' : 'group-hover:text-zinc-700'
+                          }`}>
+                            {paper.title}
+                          </span>
+                        </div>
+
+                        {/* Mobile view */}
+                        <div className="flex md:hidden flex-col gap-1.5">
+                          <div className="flex items-center gap-2 font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
+                            <span>{formattedDate}</span>
+                            <span>•</span>
+                            <span>{paper.category}</span>
+                          </div>
+                          <h3 className={`font-serif text-base leading-snug transition-colors ${
+                            isDark ? 'group-hover:text-beige-300' : 'group-hover:text-zinc-700'
+                          }`}>
+                            {paper.title}
+                          </h3>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })
+              ) : (
+                <div className="py-8 text-center font-mono text-xs text-zinc-500">
+                  No publications matched your search criteria.
+                </div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
+
       </div>
     </section>
   );

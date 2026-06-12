@@ -60,6 +60,24 @@ async function seed() {
       authors: 'J. Bhanderi, T. R&D',
       category: 'Display Architecture',
       color: 'from-fuchsia-500 to-rose-500'
+    },
+    {
+      slug: 'refractive-matching-teng-layers',
+      title: 'Refractive Index Matching in Multi-Layer PVDF-TrFE Thin Films',
+      abstract: 'Mitigating reflection and scattering boundaries between transparent electrode composites and piezoelectric layers to achieve <1.2% total display reflectance.',
+      content: '## Abstract\nMulti-layer transparent piezoelectric displays suffer from parasitic reflections at internal material interfaces. We report an index-matching methodology for poly(vinylidene fluoride-trifluoroethylene) [PVDF-TrFE] thin films using sub-wavelength silicon dioxide nanoparticle dispersions.\n\n## Optical Optimization\nBy tuning the nanoparticle volume fraction, we matched the film index from n = 1.42 to n = 1.48, eliminating parallax refraction...\n\n## Conclusion\nThe resulting multi-layer stack achieved 91% total light transmission and zero visible rainbow artifacts.',
+      authors: 'A. Vance, Dr. H. Pascal',
+      category: 'Optical Engineering',
+      color: 'from-blue-500 to-indigo-500'
+    },
+    {
+      slug: 'elastomer-fatigue-teng-stress',
+      title: 'Triboelectric Elastomer Degradation under Empirical Mechanical Stress',
+      abstract: 'Evaluating the chemical and electrical fatigue life of transparent polydimethylsiloxane (PDMS) elastomer composites under 100,000 continuous touch stress cycles.',
+      content: '## Abstract\nLong-term durability is a critical obstacle for commercial triboelectric display skins. This study monitors the mechanical degradation of micro-structured PDMS over 100,000 cycles. We show that fluorinated silanes maintain surface charge density with minimal structural fatigue.\n\n## Stress Profile\nA pneumatic actuator applied a localized 5N force at 2Hz. Electrical output was tracked in real-time, showing a minor 8% drop in peak voltage after 100k cycles...\n\n## Results\nThe micro-pillars retained their elastic recovery, proving the material is suitable for high-frequency user touch interfaces.',
+      authors: 'Dr. K. Zhao, J. Bhanderi',
+      category: 'Materials Science',
+      color: 'from-violet-500 to-purple-500'
     }
   ];
 
