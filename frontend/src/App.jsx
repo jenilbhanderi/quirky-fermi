@@ -252,10 +252,10 @@ function Navbar({ isDark }) {
             <Link to="/specs" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>Specs</Link>
             <a href="mailto:contact@hylunian.com" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>Contact</a>
           </div>
-          <Link to="/#waitlist" className={`hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full border transition-colors ${isDark ? 'bg-zinc-900 border-zinc-800 hover:bg-zinc-800' : 'bg-beige-100 border-beige-200 hover:bg-beige-200'}`}>
-            <div className={`w-2 h-2 rounded-full ${isDark ? 'bg-beige-500 shadow-[0_0_8px_#c0a57e]' : 'bg-zinc-900'}`}></div>
-            <span className={`text-[11px] font-mono uppercase tracking-widest ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>R&D Phase</span>
-          </Link>
+          <div className={`hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full border ${isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-400' : 'bg-beige-100 border-beige-200 text-zinc-600'}`}>
+            <div className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-beige-500 shadow-[0_0_8px_#c0a57e]' : 'bg-zinc-950'}`}></div>
+            <span className="text-[10px] font-mono uppercase tracking-widest">R&D Phase</span>
+          </div>
         </div>
 
       </div>
@@ -366,62 +366,17 @@ function MobileBottomNav({ isDark }) {
 }
 
 function HeroSection({ isDark, settings }) {
-  const [email, setEmail] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [waitlistCount, setWaitlistCount] = useState(null);
-
-  useEffect(() => {
-    fetch(`${API_BASE}/waitlist/count`)
-      .then(res => res.ok ? res.json() : Promise.reject('Backend error'))
-      .then(data => {
-        if (data && typeof data.total === 'number') {
-          setWaitlistCount(data.total + 142);
-        } else {
-          setWaitlistCount(142);
-        }
-      })
-      .catch(() => {
-        // Psychological Optimization: Fallback social proof if backend is unreachable
-        setWaitlistCount(142);
-      });
-  }, []);
-
-  const heroTitle = settings.hero_title || 'Self-Powered\nEmissive Architecture';
+  const heroTitle = settings.hero_title || 'Display that\ngives back.';
   const heroSubtitle = settings.hero_subtitle || 'Hylunian is pioneering transparent piezoelectric and triboelectric (TENG) display interfaces. We are engineering screens that convert your kinetic touch into self-sustaining electrical power.';
-  const ctaText = settings.cta_text || 'Request Early Access';
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email) return;
-    
-    setIsLoading(true);
-    setError('');
-    
-    try {
-      await joinWaitlist(email);
-      setIsSubmitted(true);
-    } catch (err) {
-      if (err.status === 409) {
-        setError('This email is already on the waitlist.');
-      } else {
-        setError(err.message || 'Something went wrong. Please try again.');
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
-    <section className="relative min-h-[80vh] md:min-h-[85vh] flex items-center justify-center px-6 overflow-hidden">
-      
+    <section className="relative min-h-[70vh] flex items-center justify-center px-6 overflow-hidden">
       <div className="max-w-4xl mx-auto w-full text-center relative z-10 pt-4 md:pt-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="space-y-6 md:space-y-12"
+          className="space-y-6 md:space-y-8"
         >
           {/* Surtile */}
           <div className={`font-mono text-xs uppercase tracking-[0.2em] ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
@@ -445,111 +400,6 @@ function HeroSection({ isDark, settings }) {
           >
             {heroSubtitle}
           </motion.p>
-
-          {/* Waitlist Form with Magnetic Button Animation */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            id="waitlist" 
-            className="pt-4 md:pt-8 flex flex-col items-center justify-center scroll-mt-32"
-          >
-            {isSubmitted ? (
-              <div className={`flex items-center gap-3 px-8 py-5 border backdrop-blur-lg ${isDark ? 'bg-zinc-900/40 border-beige-50/20 text-beige-50' : 'bg-white/40 border-zinc-950/20 text-zinc-950'}`}>
-                <div className="w-2 h-2 shadow-[0_0_10px_#c0a57e] bg-beige-500"></div>
-                <span className="font-mono text-sm uppercase tracking-widest font-semibold">Access request received.</span>
-              </div>
-            ) : (
-              <>
-                <div className="flex flex-col items-start w-full max-w-lg mb-2 pl-4 text-left border-l-2 border-zinc-950/20">
-                  <label htmlFor="waitlist-email" className="font-mono text-[11px] uppercase tracking-widest text-zinc-500">
-                    Priority Waitlist
-                  </label>
-                </div>
-                <form onSubmit={handleSubmit} className={`flex flex-col sm:flex-row items-stretch w-full max-w-lg border backdrop-blur-xl transition-all shadow-2xl ${isDark ? 'bg-zinc-900/40 border-beige-50/20 focus-within:ring-2 focus-within:ring-beige-50/40' : 'bg-white/40 border-zinc-950/20 focus-within:ring-2 focus-within:ring-zinc-950/40'}`}>
-                  <input
-                    id="waitlist-email"
-                    type="email"
-                    required
-                    aria-label="Email address for priority waitlist"
-                    placeholder="Enter your email address"
-                    value={email}
-                    onChange={(e) => { setEmail(e.target.value); setError(''); }}
-                    className={`w-full px-6 py-4 bg-transparent focus:outline-none focus:ring-0 font-mono text-sm transition-colors ${isDark ? 'text-beige-50 placeholder-zinc-600' : 'text-zinc-950 placeholder-zinc-400'}`}
-                  />
-                  
-                  {/* Magnetic Button Hover Effect */}
-                  <motion.button
-                    type="submit"
-                    disabled={isLoading}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`w-full sm:w-auto px-8 py-4 font-mono text-sm uppercase tracking-wider font-semibold transition-colors flex items-center justify-center gap-2 group whitespace-nowrap disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 relative overflow-hidden ${isDark ? 'bg-beige-50 text-zinc-950 hover:bg-beige-200 shadow-[0_0_15px_rgba(192,165,126,0.3)]' : 'bg-zinc-950 text-beige-50 hover:bg-zinc-800'}`}
-                  >
-                    <span className="absolute inset-0 w-full h-full bg-white/20 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></span>
-                    <span className="relative z-10 flex items-center gap-2">
-                      {isLoading ? 'Submitting...' : ctaText}
-                      {!isLoading && (
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                        </span>
-                      )}
-                    </span>
-                  </motion.button>
-                </form>
-
-                {/* Scarcity / Progress Bar Removed as requested */}
-                {waitlistCount !== null && !error && !isSubmitted && (
-                  <motion.div 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
-                    className={`mt-5 text-sm font-light ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}
-                  >
-                    <span className={`font-mono text-[11px] uppercase tracking-widest font-semibold ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>[ {waitlistCount} Researchers in Queue ]</span>
-                  </motion.div>
-                )}
-                {error && (
-                  <motion.p 
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 text-sm text-red-400"
-                  >
-                    {error}
-                  </motion.p>
-                )}
-                
-                {/* Trust Badges */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.5 }}
-                  className="mt-6 flex items-center gap-6 justify-center"
-                >
-                  <div className="flex items-center gap-1.5 opacity-60">
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    <span className="font-mono text-[9px] uppercase tracking-widest text-zinc-600">AES-256 Encrypted</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 opacity-60">
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span className="font-mono text-[9px] uppercase tracking-widest text-zinc-600">No Spam Guarantee</span>
-                  </div>
-                </motion.div>
-
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className={`mt-4 text-xs font-light max-w-sm text-center mx-auto ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}
-                >
-                  Your email is strictly used for R&D updates. <Link to="/legal" className="underline hover:text-zinc-400">Privacy Policy</Link>
-                </motion.p>
-              </>
-            )}
-          </motion.div>
         </motion.div>
       </div>
     </section>

@@ -122,10 +122,10 @@ export default function ResearchArticle() {
         <div className="w-12 h-12 mx-auto border border-zinc-950/20 bg-beige-100 flex items-center justify-center rounded-full mb-6">
           <div className="w-2 h-2 rounded-full bg-zinc-950"></div>
         </div>
-        <h3 className="font-serif text-2xl mb-4 text-zinc-950">Stay Updated on Our Research</h3>
-        <p className="mb-8 font-light text-zinc-600">Join the waitlist to receive future papers directly in your inbox.</p>
-        <Link to="/" className="inline-block px-8 py-4 font-mono text-xs uppercase tracking-widest transition-colors bg-zinc-950 text-beige-50 hover:bg-zinc-800">
-          Return Home
+        <h3 className="font-serif text-2xl mb-4 text-zinc-950">Hylunian R&D</h3>
+        <p className="mb-8 font-light text-zinc-600">Explore our latest technical documentation and publications index.</p>
+        <Link to="/research" className="inline-block px-8 py-4 font-mono text-xs uppercase tracking-widest transition-colors bg-zinc-950 text-beige-50 hover:bg-zinc-800">
+          All Publications
         </Link>
       </div>
     </motion.article>
