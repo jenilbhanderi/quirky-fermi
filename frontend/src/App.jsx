@@ -258,8 +258,7 @@ function MobileBottomNav({ isDark }) {
     { label: 'Home', path: '/', icon: Home, isAnchor: false },
     { label: 'About', path: '/about', icon: Layers, isAnchor: false },
     { label: 'Research', path: '/research', icon: BookOpen, isAnchor: false },
-    { label: 'Specs', path: '/specs', icon: Cpu, isAnchor: false },
-    { label: 'Contact', path: 'mailto:contact@hylunian.com', icon: Mail, isAnchor: true }
+    { label: 'Specs', path: '/specs', icon: Cpu, isAnchor: false }
   ];
 
   const isActive = (item) => {
@@ -388,14 +387,14 @@ function HeroSection({ isDark, settings }) {
   };
 
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center px-6 overflow-hidden">
+    <section className="relative min-h-[80vh] md:min-h-[85vh] flex items-center justify-center px-6 overflow-hidden">
       
-      <div className="max-w-4xl mx-auto w-full text-center relative z-10 pt-12">
+      <div className="max-w-4xl mx-auto w-full text-center relative z-10 pt-4 md:pt-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="space-y-12"
+          className="space-y-6 md:space-y-12"
         >
           {/* Surtile */}
           <div className={`font-mono text-xs uppercase tracking-[0.2em] ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
@@ -407,7 +406,7 @@ function HeroSection({ isDark, settings }) {
             text={heroTitle}
             element="h1"
             delay={0.2}
-            className={`text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-serif tracking-tight leading-[0.95] mx-auto justify-center ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}
+            className={`text-3xl sm:text-5xl md:text-7xl lg:text-[7rem] font-serif tracking-tight leading-[0.95] mx-auto justify-center ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}
           />
 
           {/* Body */}
@@ -415,7 +414,7 @@ function HeroSection({ isDark, settings }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
-            className={`max-w-2xl mx-auto text-lg md:text-xl font-light leading-relaxed transition-colors ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}
+            className={`max-w-2xl mx-auto text-base md:text-xl font-light leading-relaxed transition-colors ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}
           >
             {heroSubtitle}
           </motion.p>
@@ -426,7 +425,7 @@ function HeroSection({ isDark, settings }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.2 }}
             id="waitlist" 
-            className="pt-8 flex flex-col items-center justify-center scroll-mt-32"
+            className="pt-4 md:pt-8 flex flex-col items-center justify-center scroll-mt-32"
           >
             {isSubmitted ? (
               <div className={`flex items-center gap-3 px-8 py-5 border backdrop-blur-lg ${isDark ? 'bg-zinc-900/40 border-beige-50/20 text-beige-50' : 'bg-white/40 border-zinc-950/20 text-zinc-950'}`}>
@@ -639,7 +638,7 @@ function TeamSection({ isDark }) {
 
 function LatestResearchSection({ isDark, papers }) {
   return (
-    <section className={`px-6 py-16 md:py-24 relative border-t transition-colors duration-500 ${isDark ? 'border-beige-50/10' : 'border-zinc-950/10'}`}>
+    <section className={`hidden md:block px-6 py-16 md:py-24 relative border-t transition-colors duration-500 ${isDark ? 'border-beige-50/10' : 'border-zinc-950/10'}`}>
       <div className="max-w-5xl mx-auto">
         <div className="flex justify-between items-end mb-12">
           <div>
