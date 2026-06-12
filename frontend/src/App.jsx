@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useSpring, useMotionValueEvent } from 'framer-motion';
-import { ArrowRight, Layers, Plus, Home, BookOpen, Cpu, Mail } from 'lucide-react';
+import { ArrowRight, Layers, Plus, Home, BookOpen, Cpu, Mail, ChevronRight } from 'lucide-react';
 import TypewriterText from './components/TypewriterText';
 
 const Legal = lazy(() => import('./Legal'));
@@ -145,10 +145,15 @@ export default function App() {
                     ) : (
                       <>
                         <HeroSection isDark={isDark} settings={settings} />
-                        <AboutSection isDark={isDark} />
-                        <TeamSection isDark={isDark} />
+                        <LatestResearchSection isDark={isDark} papers={papers} />
                       </>
                     )
+                  } />
+                  <Route path="/about" element={
+                    <>
+                      <AboutSection isDark={isDark} />
+                      <TeamSection isDark={isDark} />
+                    </>
                   } />
                   <Route path="/research" element={
                     loading ? (
@@ -215,7 +220,7 @@ function Navbar({ isDark }) {
         
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-8 mr-4 text-xs font-mono uppercase tracking-widest">
-            <Link to="/#about" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>About</Link>
+            <Link to="/about" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>About</Link>
             <Link to="/research" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>Research</Link>
             <Link to="/specs" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>Specs</Link>
             <a href="mailto:contact@hylunian.com" className={`transition-colors ${isDark ? 'text-zinc-500 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>Contact</a>
@@ -251,7 +256,7 @@ function MobileBottomNav({ isDark }) {
 
   const navItems = [
     { label: 'Home', path: '/', icon: Home, isAnchor: false },
-    { label: 'About', path: '/#about', icon: Layers, isAnchor: false },
+    { label: 'About', path: '/about', icon: Layers, isAnchor: false },
     { label: 'Research', path: '/research', icon: BookOpen, isAnchor: false },
     { label: 'Specs', path: '/specs', icon: Cpu, isAnchor: false },
     { label: 'Contact', path: 'mailto:contact@hylunian.com', icon: Mail, isAnchor: true }
@@ -259,12 +264,7 @@ function MobileBottomNav({ isDark }) {
 
   const isActive = (item) => {
     if (item.isAnchor) return false;
-    if (item.label === 'About') {
-      return location.pathname === '/' && location.hash === '#about';
-    }
-    if (item.label === 'Home') {
-      return location.pathname === '/' && location.hash !== '#about';
-    }
+    if (item.path === '/') return location.pathname === '/';
     return location.pathname.startsWith(item.path);
   };
 
@@ -631,6 +631,44 @@ function TeamSection({ isDark }) {
                 </p>
              </div>
            </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LatestResearchSection({ isDark, papers }) {
+  return (
+    <section className={`px-6 py-16 md:py-24 relative border-t transition-colors duration-500 ${isDark ? 'border-beige-50/10' : 'border-zinc-950/10'}`}>
+      <div className="max-w-5xl mx-auto">
+        <div className="flex justify-between items-end mb-12">
+          <div>
+            <div className={`font-mono text-xs uppercase tracking-[0.2em] mb-3 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
+              Phase 02 / Documentation
+            </div>
+            <h2 className={`font-serif text-3xl sm:text-4xl tracking-tight leading-none ${isDark ? 'text-beige-50' : 'text-zinc-950'}`}>
+              Latest Research
+            </h2>
+          </div>
+          <Link to="/research" className={`font-mono text-xs uppercase tracking-widest flex items-center gap-1 transition-colors ${isDark ? 'text-zinc-400 hover:text-beige-50' : 'text-zinc-500 hover:text-zinc-950'}`}>
+            All Papers <ChevronRight size={14} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {papers.slice(0, 2).map((paper, index) => (
+            <motion.div
+              key={paper.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: index * 0.15, duration: 0.6 }}
+            >
+              <Link to={`/research/${paper.slug}`}>
+                <ResearchCard paper={paper} isDark={isDark} />
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
