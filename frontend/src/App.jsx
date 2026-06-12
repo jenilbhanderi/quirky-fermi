@@ -425,7 +425,7 @@ function HeroSection({ isDark, settings }) {
         >
           {/* Surtile */}
           <div className={`font-mono text-xs uppercase tracking-[0.2em] ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
-            Subpixel Energy Harvesting
+            Display that gives back.
           </div>
 
           {/* Headline - Temporal Typography */}
