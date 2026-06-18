@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1E56DB" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+  </defs>
+  <!-- Monogram using Space Grotesk Bold path outlines -->
+  <path d="M19.80 0L6.60 0L6.60-70L19.80-70L19.80-41.10L45.80-41.10L45.80-70L59-70L59 0L45.80 0L45.80-29.10L19.80-29.10L19.80 0M78.60 1.40Q74.50 1.40 71.75-1.25QNaN-3.90 NaN-8.10QNaN-12.30 71.75-14.95Q74.50-17.60 78.60-17.60Q82.60-17.60 85.30-14.95QNaN-12.30 NaN-8.10QNaN-3.90 85.30-1.25Q82.60 1.40 78.60 1.40" transform="translate(62.62, 396.23) scale(4.0885)" fill="url(#brandGrad)" />
+</svg>

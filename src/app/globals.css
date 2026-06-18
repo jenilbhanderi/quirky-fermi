@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   HYLUNIAN DESIGN SYSTEM — ULTRA-MODERN CLEAN-ROOM
+   Visual Direction: High-contrast, Clinical Research Laboratory
+   Color Palette: Pure White, Cobalt Blue, Energy Emerald, Midnight Slate
+   Fonts: Space Grotesk (display) · Inter (body) · JetBrains Mono (mono)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Tailwind Theme Extensions ─── */
+@theme inline {
+  /* Color Tokens */
+  --color-background: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #F8FAFC;
+  --color-text-primary: #0B0F19;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94A3B8;
+  --color-primary: #1E56DB;
+  --color-primary-hover: #1A4BBF;
+  --color-primary-light: rgba(30, 86, 219, 0.06);
+  --color-accent: #10B981;
+  --color-accent-light: rgba(16, 185, 129, 0.06);
+  --color-border: rgba(15, 23, 42, 0.08);
+  --color-border-light: rgba(15, 23, 42, 0.04);
+
+  /* Font Families */
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Custom Spacing */
+  --spacing-section: 6rem;
+  --spacing-section-lg: 8rem;
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.4s ease-out forwards;
+  --animate-fade-up: fade-up 0.4s ease-out forwards;
+}
+
+/* ─── Keyframe Animations ─── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Base Styles ─── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+/* ─── Typography Defaults ─── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+/* ─── Selection Style ─── */
+::selection {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* ─── Focus Styles (Accessibility) ─── */
+:focus-visible {
+  outline: 1px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ─── Scrollbar Styling ─── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ─── Utility: Label Style (used for section labels) ─── */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-accent);
+}
+
+/* ─── Utility: Gradient Text ─── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Glass / Translucent Overlay ─── */
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ─── Static Draftsman Grid ─── */
+.grid-blueprint {
+  background-image: 
+    linear-gradient(to right, rgba(15, 23, 42, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.015) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ─── Hairline Structural Rules ─── */
+.draftsman-line {
+  position: relative;
+}
+.draftsman-line::after {
+  content: "";
+  position: absolute;
+  background-color: var(--color-border);
+}
+
+/* ─── Tactile Letterpress Offset Card ─── */
+.glass-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 2px 2px 0px rgba(11, 15, 25, 0.06);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px rgba(30, 86, 219, 0.08);
+  border-color: var(--color-primary);
+}
+
+/* ─── Glow blobs are made subtle and static, acting as warm paper vignettes ─── */
+.glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.04;
+}
