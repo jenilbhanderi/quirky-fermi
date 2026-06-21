@@ -32,7 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
   title: {
     template: "%s | Hylunian AI",
-    default: "Hylunian | Intelligence that gives back.",
+    default: "Hylunian",
   },
   description:
     "Pioneering localized, high-efficiency cognitive architectures that bring physical intelligence to the edge of the network.",
@@ -50,13 +50,13 @@ export const metadata = {
     locale: "en_US",
     url: "https://hylunian.com",
     siteName: "Hylunian AI",
-    title: "Hylunian | Intelligence that gives back.",
+    title: "Hylunian",
     description:
       "Pioneering localized, high-efficiency cognitive architectures that bring physical intelligence to the edge of the network.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hylunian | Intelligence that gives back.",
+    title: "Hylunian",
     description:
       "Pioneering localized, high-efficiency cognitive architectures that bring physical intelligence to the edge of the network.",
   },
