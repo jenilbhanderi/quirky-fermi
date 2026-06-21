@@ -88,7 +88,7 @@ export default function ComingSoonPage() {
       </div>
 
       {/* ─── BACKGROUND LAYER: ORANGE CORE (1.0 s fade delay) ─── */}
-      <div className="absolute bottom-[calc(0vh-55vw)] md:bottom-[calc(11vh-60vw)] left-1/2 -translate-x-1/2 w-[110vw] md:w-[120vw] h-[110vw] md:h-[120vw] pointer-events-none z-0 aspect-square">
+      <div className="absolute bottom-[calc(5vh-100vw)] md:bottom-[calc(11vh-60vw)] left-1/2 -translate-x-1/2 w-[200vw] md:w-[120vw] h-[200vw] md:h-[120vw] pointer-events-none z-0 aspect-square">
         {/* Soft entry fade */}
         <div className="w-full h-full animate-fade-slow" style={{ animationDelay: "1.0s" }}>
           {/* Looping ambient slow sunrise core breathing animation (scale 1.0 to 1.015 over 18s) */}
@@ -105,7 +105,7 @@ export default function ComingSoonPage() {
       </div>
 
       {/* ─── FOREGROUND OVERLAY: GLASS DISTORTION SPHERE (1.0 s fade delay) ─── */}
-      <div className="absolute bottom-[calc(48vh-200vw)] md:bottom-[calc(60vh-220vw)] left-1/2 -translate-x-1/2 w-[200vw] md:w-[220vw] h-[200vw] md:h-[220vw] pointer-events-none z-10 aspect-square">
+      <div className="absolute bottom-[calc(30vh-200vw)] md:bottom-[calc(60vh-220vw)] left-1/2 -translate-x-1/2 w-[200vw] md:w-[220vw] h-[200vw] md:h-[220vw] pointer-events-none z-10 aspect-square">
         {/* Soft entry fade */}
         <div className="w-full h-full animate-fade-slow" style={{ animationDelay: "1.0s" }}>
           {/* Static high-fidelity glass dome element */}
@@ -186,41 +186,48 @@ export default function ComingSoonPage() {
         </p>
       </div>
 
-      {/* ─── MOBILE VERSION ─── */}
-      <main className="md:hidden relative z-20 flex flex-col items-center justify-center flex-1 py-12 px-6 text-center">
+      {/* ─── MOBILE VERSION (Absolute Layout for precise visual hierarchy) ─── */}
+      <div className="md:hidden absolute inset-0 z-20 pointer-events-none select-none">
         {/* Title (0.5 s fade delay) */}
-        <h1 
-          className="font-display text-[13vw] font-black leading-none text-text-primary tracking-tighter uppercase select-none mb-4 animate-fade-slow"
-          style={{ letterSpacing: "-0.04em", animationDelay: "0.5s" }}
+        <div 
+          className="absolute top-[28%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-5 w-full text-center px-6 animate-fade-slow pointer-events-auto"
+          style={{ animationDelay: "0.5s" }}
         >
-          Coming Soon
-        </h1>
+          <h1 
+            className="font-display text-[12vw] font-black leading-none text-text-primary tracking-tighter uppercase"
+            style={{ letterSpacing: "-0.04em" }}
+          >
+            Coming Soon
+          </h1>
+        </div>
 
-        {/* Subtitle (0.7 s fade delay - Letter spacing reduced by ~5% to tracking-[0.09em]) */}
-        <p 
-          className="text-xs font-display font-bold tracking-[0.09em] text-text-primary/70 uppercase mb-16 animate-fade-slow"
+        {/* Subtitle (0.7 s fade delay) */}
+        <div 
+          className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full text-center px-6 animate-fade-slow pointer-events-auto"
           style={{ animationDelay: "0.7s" }}
         >
-          Native intelligence for enterprises.
-        </p>
+          <p className="font-display text-[10px] font-bold tracking-[0.09em] text-text-primary/70 uppercase">
+            Native intelligence for enterprises.
+          </p>
+        </div>
 
-        {/* Ultra-minimalist Email Waitlist (1.2 s fade delay) */}
+        {/* Email Waitlist Input Bar (1.2 s fade delay) */}
         <div 
-          className="w-full max-w-[280px] mx-auto mt-4 text-center animate-fade-slow"
+          className="absolute left-1/2 bottom-[18%] -translate-x-1/2 z-20 text-center w-full max-w-[260px] pointer-events-auto animate-fade-slow"
           style={{ animationDelay: "1.2s" }}
         >
           {submitted ? (
-            <div className="py-2 animate-fade-in">
-              <span className="text-xs font-mono font-bold text-text-primary uppercase tracking-wider block">
+            <div className="py-1 animate-fade-in">
+              <span className="text-[10px] font-mono font-bold text-text-primary uppercase tracking-wider block">
                 ✓ CONNECTION ESTABLISHED
               </span>
             </div>
           ) : (
-            <form onSubmit={handleSubscribe} className="flex flex-col w-full">
-              <span className="text-[11px] font-bold text-text-primary/80 font-mono uppercase tracking-[0.12em] mb-2 block">
+            <form onSubmit={handleSubscribe} className="flex flex-col w-full px-4">
+              <span className="text-[10px] font-bold text-text-primary/80 font-mono uppercase tracking-[0.12em] mb-2 block">
                 Join the waitlist
               </span>
-              <div className="flex items-center gap-2 border-b border-text-primary/35 focus-within:border-text-primary/70 transition-colors py-1.5">
+              <div className="flex items-center gap-2 border-b border-text-primary/35 focus-within:border-text-primary/70 transition-colors py-1">
                 <input 
                   type="email" 
                   required 
@@ -239,24 +246,24 @@ export default function ComingSoonPage() {
                 </button>
               </div>
               {error && (
-                <span className="text-[10px] font-mono font-semibold text-red-500 uppercase tracking-wider mt-2 block text-center animate-fade-in">
+                <span className="text-[9px] font-mono font-semibold text-red-500 uppercase tracking-wider mt-2 block text-center animate-fade-in">
                   {error}
                 </span>
               )}
             </form>
           )}
         </div>
-      </main>
 
-      {/* ─── MOBILE FOOTER (1.2 s fade delay) ─── */}
-      <footer 
-        className="md:hidden relative z-20 w-full flex flex-col items-center py-6 text-center border-t border-border/5 animate-fade-slow"
-        style={{ animationDelay: "1.2s" }}
-      >
-        <p className="text-[11px] font-mono font-bold text-text-primary/80 uppercase tracking-wider">
-          © {new Date().getFullYear()} HYLUNIAN AI.
-        </p>
-      </footer>
+        {/* Copyright Footer (1.2 s fade delay) */}
+        <div 
+          className="absolute left-1/2 bottom-[6%] -translate-x-1/2 z-20 w-full text-center animate-fade-slow pointer-events-auto"
+          style={{ animationDelay: "1.2s" }}
+        >
+          <p className="text-[9px] font-mono font-bold text-text-primary/80 uppercase tracking-wider">
+            © {new Date().getFullYear()} HYLUNIAN AI.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
