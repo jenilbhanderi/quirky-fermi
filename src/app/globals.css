@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════
-   HYLUNIAN DESIGN SYSTEM — ULTRA-MODERN CLEAN-ROOM
-   Visual Direction: High-contrast, Clinical Research Laboratory
-   Color Palette: Pure White, Cobalt Blue, Energy Emerald, Midnight Slate
+   HYLUNIAN DESIGN SYSTEM — VIBRANT AURA TERMINAL
+   Visual Direction: High-contrast, Lavender & Wine Laboratory
+   Color Palette: Lavender Backdrop, Deep Wine Text, Apricot Accent
    Fonts: Space Grotesk (display) · Inter (body) · JetBrains Mono (mono)
    ═══════════════════════════════════════════════════════════════ */
 
 /* ─── Tailwind Theme Extensions ─── */
 @theme inline {
   /* Color Tokens */
-  --color-background: #FFFFFF;
+  --color-background: #E5E9F8;
   --color-surface: #FFFFFF;
-  --color-surface-elevated: #F8FAFC;
-  --color-text-primary: #0B0F19;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94A3B8;
-  --color-primary: #1E56DB;
-  --color-primary-hover: #1A4BBF;
-  --color-primary-light: rgba(30, 86, 219, 0.06);
-  --color-accent: #10B981;
-  --color-accent-light: rgba(16, 185, 129, 0.06);
-  --color-border: rgba(15, 23, 42, 0.08);
-  --color-border-light: rgba(15, 23, 42, 0.04);
+  --color-surface-elevated: #F1F4F9;
+  --color-text-primary: #2D041B;
+  --color-text-secondary: #4A0B2C;
+  --color-text-muted: #7A5B6F;
+  --color-primary: #2D041B;
+  --color-primary-hover: #4A0B2C;
+  --color-primary-light: rgba(45, 4, 27, 0.05);
+  --color-accent: #FF6F28;
+  --color-accent-light: rgba(255, 111, 40, 0.05);
+  --color-border: rgba(45, 4, 27, 0.1);
+  --color-border-light: rgba(45, 4, 27, 0.05);
 
   /* Font Families */
   --font-display: "Space Grotesk", system-ui, sans-serif;
@@ -36,6 +36,7 @@
   /* Animations */
   --animate-fade-in: fade-in 0.4s ease-out forwards;
   --animate-fade-up: fade-up 0.4s ease-out forwards;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* ─── Keyframe Animations ─── */
@@ -50,6 +51,11 @@
 }
 
 /* ─── Base Styles ─── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -66,7 +72,7 @@ body {
 /* ─── Typography Defaults ─── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
@@ -110,12 +116,12 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--color-accent);
+  color: var(--color-text-primary);
 }
 
 /* ─── Utility: Gradient Text ─── */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-text-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -123,7 +129,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── Glass / Translucent Overlay ─── */
 .glass {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(232, 235, 248, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
@@ -132,8 +138,8 @@ h1, h2, h3, h4, h5, h6 {
 /* ─── Static Draftsman Grid ─── */
 .grid-blueprint {
   background-image: 
-    linear-gradient(to right, rgba(15, 23, 42, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.015) 1px, transparent 1px);
+    linear-gradient(to right, rgba(59, 7, 36, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 7, 36, 0.015) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -149,16 +155,18 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── Tactile Letterpress Offset Card ─── */
 .glass-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: 2px 2px 0px rgba(11, 15, 25, 0.06);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px 0 rgba(59, 7, 36, 0.04);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px rgba(30, 86, 219, 0.08);
-  border-color: var(--color-primary);
+  box-shadow: 0 12px 40px rgba(59, 7, 36, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 /* ─── Glow blobs are made subtle and static, acting as warm paper vignettes ─── */
@@ -168,5 +176,97 @@ h1, h2, h3, h4, h5, h6 {
   filter: blur(140px);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.04;
+  opacity: 0.12;
 }
+
+.terminal-glow {
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+.terminal-glow-green {
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+
+/* ─── Animated Floating Blobs ─── */
+.animate-blob-1 {
+  animation: float-blob-1 12s ease-in-out infinite;
+}
+
+.animate-blob-2 {
+  animation: float-blob-2 15s ease-in-out infinite;
+}
+
+.animate-blob-3 {
+  animation: float-blob-3 18s ease-in-out infinite;
+}
+
+@keyframes float-blob-1 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(60px, -80px) scale(1.2); }
+  66% { transform: translate(-40px, 40px) scale(0.85); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes float-blob-2 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-80px, 60px) scale(1.15); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes float-blob-3 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-40px, -50px) scale(0.9); }
+  66% { transform: translate(50px, 70px) scale(1.1); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* ─── Cinematic Intro Animations ─── */
+.animate-fade-slow {
+  opacity: 0;
+  animation: fade-slow 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-glow-breath {
+  animation: glow 18s ease-in-out infinite;
+}
+
+@keyframes fade-slow {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes glow {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.015);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ─── Full-screen premium film grain noise overlay ─── */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+
+

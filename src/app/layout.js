@@ -1,19 +1,9 @@
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 /*
   ═══════════════════════════════════════════════════════════════
   FONT SETUP — How next/font/google works:
-
-  Next.js downloads these fonts at BUILD TIME and hosts them
-  from your own domain. This means:
-  1. No requests to Google's servers (better privacy)
-  2. No layout shift while fonts load (better performance)
-  3. The "variable" prop creates a CSS variable we can use
-     in Tailwind or globals.css
-
   We load 3 fonts:
   - Space Grotesk → Display/headlines (--font-display)
   - Inter         → Body text (--font-body)
@@ -24,7 +14,7 @@ import Footer from "@/components/Footer";
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-display",
-  display: "swap", // Shows fallback font immediately, swaps when loaded
+  display: "swap",
 });
 
 const inter = Inter({
@@ -39,32 +29,19 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-/*
-  ═══════════════════════════════════════════════════════════════
-  METADATA — SEO Configuration
-
-  This object tells search engines and social media about your site.
-  Next.js automatically generates the right <meta> tags from this.
-
-  - title.template: Every page title will be "Page Name | Hylunian"
-  - title.default: Used when a page doesn't set its own title
-  - description: Shows up in Google search results
-  - openGraph: Shows up when you share the link on Twitter/LinkedIn
-  ═══════════════════════════════════════════════════════════════
-*/
 export const metadata = {
   title: {
-    template: "%s | Hylunian",
-    default: "Hylunian | Display that gives back.",
+    template: "%s | Hylunian AI",
+    default: "Hylunian | Intelligence that gives back.",
   },
   description:
-    "Pioneering transparent piezoelectric and triboelectric (TENG) display interfaces that convert kinetic touch into self-sustaining electrical power.",
+    "Pioneering localized, high-efficiency cognitive architectures that bring physical intelligence to the edge of the network.",
   keywords: [
-    "piezoelectric display",
-    "TENG",
-    "energy harvesting",
-    "transparent display",
-    "self-powered display",
+    "edge AI",
+    "cognitive edge",
+    "physical intelligence",
+    "neuromorphic compute",
+    "model quantization",
     "Hylunian",
   ],
   authors: [{ name: "Jenil Bhanderi" }],
@@ -72,16 +49,16 @@ export const metadata = {
     type: "website",
     locale: "en_US",
     url: "https://hylunian.com",
-    siteName: "Hylunian",
-    title: "Hylunian | Display that gives back.",
+    siteName: "Hylunian AI",
+    title: "Hylunian | Intelligence that gives back.",
     description:
-      "Pioneering transparent piezoelectric and triboelectric display interfaces.",
+      "Pioneering localized, high-efficiency cognitive architectures that bring physical intelligence to the edge of the network.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hylunian | Display that gives back.",
+    title: "Hylunian | Intelligence that gives back.",
     description:
-      "Pioneering transparent piezoelectric and triboelectric display interfaces.",
+      "Pioneering localized, high-efficiency cognitive architectures that bring physical intelligence to the edge of the network.",
   },
   icons: {
     icon: "/favicon.svg",
@@ -92,27 +69,6 @@ export const metadata = {
   },
 };
 
-/*
-  ═══════════════════════════════════════════════════════════════
-  ROOT LAYOUT — The Shell of Every Page
-
-  This component wraps EVERY page on your site. Think of it
-  as the "frame" — the Navbar and Footer are always present,
-  and the {children} slot is where each page's content goes.
-
-  Structure:
-  ┌─────────────────────────┐
-  │        Navbar            │  ← Always visible
-  ├─────────────────────────┤
-  │                         │
-  │     {children}          │  ← Changes per page
-  │     (page content)      │
-  │                         │
-  ├─────────────────────────┤
-  │        Footer            │  ← Always visible
-  └─────────────────────────┘
-  ═══════════════════════════════════════════════════════════════
-*/
 export default function RootLayout({ children }) {
   return (
     <html
@@ -120,9 +76,7 @@ export default function RootLayout({ children }) {
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-screen flex flex-col bg-background text-text-primary antialiased">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <main className="flex-1 flex flex-col">{children}</main>
       </body>
     </html>
   );

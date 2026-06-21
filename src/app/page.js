@@ -1,331 +1,262 @@
 "use client";
 
-/*
-  ═══════════════════════════════════════════════════════════════
-   EDITORIAL LAB HOMEPAGE
+import { useState, useEffect } from "react";
 
-   This is a clean, minimal scientific journal-style layout.
-   No animations, no mouse-tracking grids, and no sandbox.
-   Clean typography, draftsman grids, and high-end print look.
-  ═══════════════════════════════════════════════════════════════
-*/
+export default function ComingSoonPage() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [placeholder, setPlaceholder] = useState("your@email.com|");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-import Link from "next/link";
-import Button from "@/components/Button";
+  // Smooth terminal-like cursor blinking effect inside the email field
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholder((prev) => 
+        prev.endsWith("|") ? "your@email.com " : "your@email.com|"
+      );
+    }, 530);
+    return () => clearInterval(interval);
+  }, []);
 
-/* ─── Static Feature Card (Tactile Flat Offset Card) ─── */
-function FeatureCard({ icon, title, description }) {
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to join the waitlist.");
+      }
+
+      setSubmitted(true);
+      setEmail("");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="glass-card p-8 rounded-lg flex flex-col justify-between h-full">
-      <div>
-        <div className="w-12 h-12 rounded bg-primary-light flex items-center justify-center mb-6 text-primary">
-          {icon}
-        </div>
-        <h3 className="font-display text-lg font-semibold text-text-primary mb-3">
-          {title}
-        </h3>
-        <p className="text-sm text-text-secondary leading-relaxed">
-          {description}
-        </p>
-      </div>
-    </div>
-  );
-}
+    <div className="relative min-h-screen w-full bg-background text-text-primary overflow-hidden flex flex-col justify-between select-none">
+      {/* ─── HEADER (0.2 s fade delay) ─── */}
+      <header 
+        className="relative z-30 w-full flex items-center justify-between px-8 md:px-12 py-6 animate-fade-slow"
+        style={{ animationDelay: "0.2s" }}
+      >
+        <span className="font-display text-lg font-bold tracking-tight text-text-primary">
+          Hylunian.
+        </span>
+      </header>
 
-/* ─── Static Application Card (Flat Offset Card) ─── */
-function ApplicationCard({ category, title, description, borderAccent }) {
-  return (
-    <div className="glass-card p-8 rounded-lg flex flex-col justify-between h-full relative overflow-hidden">
+      {/* ─── DESKTOP ELEMENTS ─── */}
+      
+      {/* Title (0.5 s fade delay - Moved 60px higher to top-[27%]) */}
       <div 
-        className="absolute top-0 left-0 right-0 h-1" 
-        style={{ backgroundColor: borderAccent }} 
-      />
-      <div>
-        <span className="font-mono text-[9px] uppercase tracking-wider text-text-muted font-bold block mb-3">
-          {category}
-        </span>
-        <h3 className="font-display text-lg font-semibold text-text-primary mb-3">
-          {title}
-        </h3>
-        <p className="text-sm text-text-secondary leading-relaxed">
-          {description}
+        className="hidden md:block absolute top-[27%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-5 w-full text-center px-6 animate-fade-slow"
+        style={{ animationDelay: "0.5s" }}
+      >
+        <h1 
+          className="font-display text-[9vw] font-black leading-none text-text-primary tracking-tighter uppercase select-none"
+          style={{ letterSpacing: "-0.04em" }}
+        >
+          Coming Soon
+        </h1>
+      </div>
+
+      {/* Subtitle (0.7 s fade delay - Explains what's coming soon, letter spacing reduced by ~5% to tracking-[0.09em] for tight layout) */}
+      <div 
+        className="hidden md:block absolute top-[43%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full text-center px-6 animate-fade-slow"
+        style={{ animationDelay: "0.7s" }}
+      >
+        <p className="font-display text-xs md:text-sm font-bold tracking-[0.09em] text-text-primary/70 uppercase">
+          Native intelligence for enterprises.
         </p>
       </div>
-    </div>
-  );
-}
 
-/* ─── Flat Scientific Diagram (Draftsman Blueprint Style) ─── */
-function TechLayerBlueprint() {
-  const layers = [
-    { name: "Protective Overlay", material: "Textured PDMS", optic: "High Transmittance", role: "Triboelectric Friction Interface" },
-    { name: "Top Electrode Grid", material: "AgNW Network", optic: "Optically Transparent", role: "Charge Collection Grid Array" },
-    { name: "Active Copolymer Layer", material: "PVDF-TrFE", optic: "High Transmittance", role: "Piezoelectric Crystalline Transducer" },
-    { name: "Decoupling Elastomer", material: "Index-Matched Polymer", optic: "Optically Clear", role: "Electrical Isolation & Shear Relief" },
-    { name: "Substrate Panel", material: "OLED/LCD Emissive Matrix", optic: "Active Display", role: "Display Substrate Layer" },
-  ];
-
-  return (
-    <div className="glass-card p-6 md:p-8 rounded-lg">
-      <div className="flex justify-between items-center mb-6 pb-4 border-b border-border">
-        <div>
-          <span className="font-mono text-[10px] text-accent uppercase tracking-widest font-semibold block">
-            Figure 1.1 / Stack Schematic
-          </span>
-          <h3 className="font-display text-md font-bold text-text-primary mt-1">
-            Display Lamination Cross-Section
-          </h3>
-        </div>
-        <span className="font-mono text-[9px] text-text-muted border border-border px-2 py-0.5 bg-background rounded">
-          Scale: Conceptual
-        </span>
-      </div>
-
-      <div className="space-y-4">
-        {layers.map((layer, idx) => (
+      {/* ─── BACKGROUND LAYER: ORANGE CORE (1.0 s fade delay) ─── */}
+      <div className="absolute bottom-[calc(0vh-55vw)] md:bottom-[calc(11vh-60vw)] left-1/2 -translate-x-1/2 w-[110vw] md:w-[120vw] h-[110vw] md:h-[120vw] pointer-events-none z-0 aspect-square">
+        {/* Soft entry fade */}
+        <div className="w-full h-full animate-fade-slow" style={{ animationDelay: "1.0s" }}>
+          {/* Looping ambient slow sunrise core breathing animation (scale 1.0 to 1.015 over 18s) */}
           <div 
-            key={idx} 
-            className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 border border-border bg-background/50 rounded relative group hover:border-primary transition-colors"
-          >
-            {/* Index Label */}
-            <div className="font-mono text-[10px] text-text-muted font-bold shrink-0">
-              [0{idx + 1}]
-            </div>
-
-            {/* Simulated cross section sheet bar */}
-            <div className="w-full md:w-32 h-3.5 bg-surface border border-border relative rounded overflow-hidden shrink-0">
-              <div 
-                className="absolute inset-0 bg-primary opacity-[0.08]" 
-                style={{ opacity: 0.25 - idx * 0.04 }} 
-              />
-              {idx === 2 && (
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 bg-accent opacity-60" />
-              )}
-            </div>
-
-            {/* Layer Info */}
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-wrap items-baseline gap-2">
-                <span className="font-display text-sm font-semibold text-text-primary">
-                  {layer.name}
-                </span>
-                <span className="font-mono text-[9px] text-text-muted">
-                  ({layer.material})
-                </span>
-              </div>
-              <p className="font-mono text-[9px] text-text-muted mt-0.5 uppercase tracking-wider">
-                {layer.role}
-              </p>
-            </div>
-
-            {/* Technical Parameters */}
-            <div className="shrink-0 text-right md:self-center">
-              <div className="px-2 py-1 bg-white border border-border rounded text-center">
-                <span className="font-mono text-[8px] text-text-muted leading-none uppercase block mb-0.5">Optics</span>
-                <span className="font-mono text-[9px] font-semibold text-text-primary uppercase">{layer.optic}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+            className="w-full h-full rounded-full animate-glow-breath" 
+            style={{ 
+              filter: "blur(35px)", 
+              opacity: 0.90,
+              background: "radial-gradient(circle, #FF6F28 0%, #FFA24A 30%, #FFE2B7 60%, rgba(229, 233, 248, 0) 80%)"
+            }}
+            aria-hidden="true"
+          />
+        </div>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-        <p className="font-mono text-[8px] text-text-muted max-w-lg leading-relaxed">
-          * PVDF-TrFE: Poly(vinylidene fluoride-co-trifluoroethylene). AgNW: Silver Nanowire.
-        </p>
-        <span className="font-mono text-[8px] text-accent font-semibold uppercase tracking-widest">
-          Hylunian R&D Lamination Stack
-        </span>
+      {/* ─── FOREGROUND OVERLAY: GLASS DISTORTION SPHERE (1.0 s fade delay) ─── */}
+      <div className="absolute bottom-[calc(48vh-200vw)] md:bottom-[calc(60vh-220vw)] left-1/2 -translate-x-1/2 w-[200vw] md:w-[220vw] h-[200vw] md:h-[220vw] pointer-events-none z-10 aspect-square">
+        {/* Soft entry fade */}
+        <div className="w-full h-full animate-fade-slow" style={{ animationDelay: "1.0s" }}>
+          {/* Static high-fidelity glass dome element */}
+          <div 
+            className="w-full h-full rounded-full"
+            style={{ 
+              backgroundImage: "radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(125, 146, 255, 0.03) 75%, rgba(45, 4, 27, 0.04) 100%), url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E\")",
+              backgroundSize: "cover, 120px 120px",
+              border: "1px solid rgba(255, 255, 255, 0.7)",
+              boxShadow: `
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+                inset 0 25px 40px rgba(255, 255, 255, 0.65), 
+                inset -20px -20px 50px rgba(125, 146, 255, 0.12), 
+                inset 20px 20px 50px rgba(255, 111, 40, 0.10), 
+                inset 0 0 40px rgba(255, 255, 255, 0.2),
+                0 0 40px rgba(255, 255, 255, 0.25), 
+                0 0 100px rgba(255, 111, 40, 0.22), 
+                0 35px 70px rgba(45, 4, 27, 0.03)
+              `,
+              backdropFilter: "blur(32px) saturate(1.8) contrast(1.1)",
+              WebkitBackdropFilter: "blur(32px) saturate(1.8) contrast(1.1)",
+            }}
+            aria-hidden="true"
+          />
+        </div>
       </div>
-    </div>
-  );
-}
 
-export default function HomePage() {
-
-  return (
-    <div className="flex flex-col min-h-screen">
-      {/* ═══ HERO SECTION ═══ */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background border-b border-border">
-        {/* Background draftsman grid */}
-        <div className="absolute inset-0 grid-blueprint opacity-[0.7]" aria-hidden="true" />
-        
-        {/* Structural draftsman hairline guides */}
-        <div className="absolute inset-y-0 left-12 w-[1px] bg-border/40" />
-        <div className="absolute inset-y-0 right-12 w-[1px] bg-border/40" />
-        <div className="absolute inset-x-0 top-32 h-[1px] bg-border/40" />
-
-        {/* Gradient rising from the bottom */}
-        <div 
-          className="absolute inset-x-0 bottom-0 h-96 pointer-events-none" 
-          style={{ background: "linear-gradient(to top, rgba(30, 86, 219, 0.32) 0%, rgba(16, 185, 129, 0.14) 50%, rgba(255, 255, 255, 0) 100%)" }}
-          aria-hidden="true" 
-        />
-
-        {/* Static page content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center pt-24 pb-16">
-          {/* Scientific Stage Tag */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded border border-border bg-white mb-8 shadow-sm">
-            <span className="font-mono text-[9px] uppercase tracking-wider text-accent font-bold">
-              Research Specification R-03
+      {/* Bottom Left: Email subscribe input bar (1.2 s fade delay) */}
+      <div 
+        className="hidden md:block absolute left-[8%] bottom-[8%] z-20 text-left w-full max-w-[280px] pointer-events-auto animate-fade-slow"
+        style={{ animationDelay: "1.2s" }}
+      >
+        {submitted ? (
+          <div className="py-1 animate-fade-in">
+            <span className="text-xs font-mono font-bold text-text-primary uppercase tracking-wider block">
+              ✓ CONNECTION ESTABLISHED
             </span>
           </div>
+        ) : (
+          <form onSubmit={handleSubscribe} className="flex flex-col w-full">
+            <span className="text-[11px] font-bold text-text-primary/80 font-mono uppercase tracking-[0.12em] mb-2 block">
+              Join the waitlist
+            </span>
+            <div className="flex items-center gap-2 border-b border-text-primary/35 focus-within:border-text-primary/70 transition-colors py-1">
+              <input 
+                type="email" 
+                required 
+                disabled={isSubmitting}
+                placeholder={placeholder}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-transparent border-none outline-none text-xs font-mono font-semibold text-text-primary placeholder-text-primary/35 w-full disabled:opacity-50"
+              />
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="text-xs font-mono uppercase font-bold text-text-primary/90 hover:text-text-primary transition-colors cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-50"
+              >
+                {isSubmitting ? "..." : "JOIN"}
+              </button>
+            </div>
+            {error && (
+              <span className="text-[10px] font-mono font-semibold text-red-500 uppercase tracking-wider mt-2 block animate-fade-in">
+                {error}
+              </span>
+            )}
+          </form>
+        )}
+      </div>
 
-          {/* Main headline */}
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-text-primary mb-8 leading-[1.05] max-w-4xl mx-auto">
-            Display that
-            <br />
-            <span className="gradient-text">gives back.</span>
-          </h1>
+      {/* Bottom Right: Copyright (1.2 s fade delay) */}
+      <div 
+        className="hidden md:block absolute right-[8%] bottom-[8%] z-20 text-right pointer-events-auto animate-fade-slow"
+        style={{ animationDelay: "1.2s" }}
+      >
+        <p className="text-[11px] font-mono font-bold text-text-primary/80 uppercase tracking-wider">
+          © {new Date().getFullYear()} HYLUNIAN AI.
+        </p>
+      </div>
 
-          {/* Sub-headline */}
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-text-secondary leading-relaxed mb-10">
-            We are researching transparent piezoelectric and triboelectric lamination layers designed to convert mechanical finger pressure and friction into self-sustaining power for next-generation displays.
-          </p>
+      {/* ─── MOBILE VERSION ─── */}
+      <main className="md:hidden relative z-20 flex flex-col items-center justify-center flex-1 py-12 px-6 text-center">
+        {/* Title (0.5 s fade delay) */}
+        <h1 
+          className="font-display text-[13vw] font-black leading-none text-text-primary tracking-tighter uppercase select-none mb-4 animate-fade-slow"
+          style={{ letterSpacing: "-0.04em", animationDelay: "0.5s" }}
+        >
+          Coming Soon
+        </h1>
 
-          {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button href="/technology" variant="primary">
-              Explore Stack Configuration
-            </Button>
-            <Button href="/research" variant="secondary">
-              Review Research Timeline
-            </Button>
-          </div>
+        {/* Subtitle (0.7 s fade delay - Letter spacing reduced by ~5% to tracking-[0.09em]) */}
+        <p 
+          className="text-xs font-display font-bold tracking-[0.09em] text-text-primary/70 uppercase mb-16 animate-fade-slow"
+          style={{ animationDelay: "0.7s" }}
+        >
+          Native intelligence for enterprises.
+        </p>
+
+        {/* Ultra-minimalist Email Waitlist (1.2 s fade delay) */}
+        <div 
+          className="w-full max-w-[280px] mx-auto mt-4 text-center animate-fade-slow"
+          style={{ animationDelay: "1.2s" }}
+        >
+          {submitted ? (
+            <div className="py-2 animate-fade-in">
+              <span className="text-xs font-mono font-bold text-text-primary uppercase tracking-wider block">
+                ✓ CONNECTION ESTABLISHED
+              </span>
+            </div>
+          ) : (
+            <form onSubmit={handleSubscribe} className="flex flex-col w-full">
+              <span className="text-[11px] font-bold text-text-primary/80 font-mono uppercase tracking-[0.12em] mb-2 block">
+                Join the waitlist
+              </span>
+              <div className="flex items-center gap-2 border-b border-text-primary/35 focus-within:border-text-primary/70 transition-colors py-1.5">
+                <input 
+                  type="email" 
+                  required 
+                  disabled={isSubmitting}
+                  placeholder={placeholder}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-transparent border-none outline-none text-xs font-mono font-semibold text-text-primary placeholder-text-primary/35 w-full text-center disabled:opacity-50"
+                />
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="text-xs font-mono uppercase font-bold text-text-primary/90 hover:text-text-primary transition-colors cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-50"
+                >
+                  {isSubmitting ? "..." : "JOIN"}
+                </button>
+              </div>
+              {error && (
+                <span className="text-[10px] font-mono font-semibold text-red-500 uppercase tracking-wider mt-2 block text-center animate-fade-in">
+                  {error}
+                </span>
+              )}
+            </form>
+          )}
         </div>
-      </section>
+      </main>
 
-      {/* ═══ THREE CORE INNOVATIONS ═══ */}
-      <section className="relative py-20 md:py-28 px-6 lg:px-8 border-b border-border overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-12 md:mb-16">
-            <p className="label mb-4">Core Principles</p>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary mb-4">
-              Three physical mechanics
-            </h2>
-            <p className="text-base text-text-secondary leading-relaxed max-w-2xl">
-              Our research targets the integration of mechanical polarization, static contact charges, and light transmission in a single thin-film stacked device.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FeatureCard
-              icon={
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </svg>
-              }
-              title="Piezoelectric Potential"
-              description="Slight mechanical compression of the PVDF-TrFE copolymer layer deforms its crystalline structure, polarizing charges and inducing measurable voltages."
-            />
-            <FeatureCard
-              icon={
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                </svg>
-              }
-              title="Triboelectric Friction"
-              description="Contact electrification captures electrical charge generated by skin friction sliding across micro-structured top polymer layers during touch interactions."
-            />
-            <FeatureCard
-              icon={
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                </svg>
-              }
-              title="Transmittance Optics"
-              description="We refine chemical layering and match material refractive indexes to achieve high visible transmittance, preventing display haze and discoloration."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ APPLICATIONS ═══ */}
-      <section className="relative py-20 md:py-28 px-6 lg:px-8 bg-surface-elevated border-b border-border overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-12 md:mb-16">
-            <p className="label mb-4">Commercial Targets</p>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary mb-4">
-              Real-world application vectors
-            </h2>
-            <p className="text-base text-text-secondary leading-relaxed max-w-2xl">
-              By collecting wasted kinetic energy directly from interface inputs, we aim to augment secondary power cells and extend longevity in massive global markets.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <ApplicationCard
-              category="01 / Portable Wearables"
-              title="Device Longevity Augmentation"
-              description="Integrating harvesting layers behind capacitive panels on smartwatches to capture frequent screen interaction energy, extending active battery cycle runtimes."
-              borderAccent="var(--color-primary)"
-            />
-            <ApplicationCard
-              category="02 / Public Infrastructure"
-              title="Self-Powered Kiosk Terminals"
-              description="Developing touch lamination films for public terminals, ticketing gates, and smart building interfaces that power local micro-controllers from visitor usage."
-              borderAccent="var(--color-accent)"
-            />
-            <ApplicationCard
-              category="03 / Industrial Logistics"
-              title="Battery-Free Screen Modules"
-              description="Enabling zero-maintenance status displays and passive telemetry tags in automotive controls that harvest operating power from driver interactions."
-              borderAccent="var(--color-primary)"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ TECHNOLOGY DIAGRAM OVERVIEW ═══ */}
-      <section className="relative py-20 md:py-28 px-6 lg:px-8 border-b border-border overflow-hidden bg-background">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Details Column */}
-          <div className="lg:col-span-5">
-            <p className="label mb-4">Architecture</p>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary mb-6">
-              Engineering the active display stack
-            </h2>
-            <p className="text-sm sm:text-base text-text-secondary leading-relaxed mb-6">
-              The Hylunian display stack is assembled with multiple transparent films overlaying a standard emissive matrix panel. Frictional electrostatic charges and piezoelectric polarization are collected via silver nanowire (AgNW) electrodes.
-            </p>
-            <p className="text-sm sm:text-base text-text-secondary leading-relaxed mb-8">
-              A index-matched decoupling elastomer absorbs physical shear stress and isolates electric charge fields, keeping the entire lamination structurally stable and transparent.
-            </p>
-            <Button href="/technology" variant="primary">
-              Read Technology Details
-            </Button>
-          </div>
-
-          {/* Diagram Column */}
-          <div className="lg:col-span-7">
-            <TechLayerBlueprint />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ BRIEFING UPDATE CTA ═══ */}
-      <section className="relative py-20 md:py-28 px-6 lg:px-8 bg-surface-elevated overflow-hidden">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="label mb-4">Briefings</p>
-          <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary mb-6">
-            Stay aligned with our R&D roadmap
-          </h2>
-          <p className="text-base text-text-secondary leading-relaxed mb-10 max-w-xl mx-auto">
-            We publish progress summaries detailing materials calibration, lamination testing, and proof-of-concept prototype milestones.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button href="mailto:contact@hylunian.com" variant="secondary">
-              Direct Contact
-            </Button>
-            <Button href="/about" variant="ghost">
-              About Our Initiative
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* ─── MOBILE FOOTER (1.2 s fade delay) ─── */}
+      <footer 
+        className="md:hidden relative z-20 w-full flex flex-col items-center py-6 text-center border-t border-border/5 animate-fade-slow"
+        style={{ animationDelay: "1.2s" }}
+      >
+        <p className="text-[11px] font-mono font-bold text-text-primary/80 uppercase tracking-wider">
+          © {new Date().getFullYear()} HYLUNIAN AI.
+        </p>
+      </footer>
     </div>
   );
 }
